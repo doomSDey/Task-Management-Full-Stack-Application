@@ -1,5 +1,7 @@
 import Sidebar from "../../components/Sidebar";
 import TaskCard from "../../components/TaskCard";
+import Topbar from "../../components/Topbar";
+import { TaskStatus } from "../../helpers/enums";
 
 interface CardData {
     id: number;
@@ -29,17 +31,20 @@ const App: React.FC = () => {
     return (
         <div className="flex h-[90%] md:h-full">
             <Sidebar />
-            <div className="p-4 flex flex-grow">
-                <div className="columns-2 md:columns-3 xl:columns-5 gap-4">
-                    {cardData.map((card) => (
-                        <div key={card.id} className="mb-4 break-inside-avoid">
-                            <TaskCard
-                                title={card.title}
-                                description={card.description}
-                                onClick={card.onClick}
-                            />
-                        </div>
-                    ))}
+            <div className="p-4 flex flex-col flex-grow">
+                <Topbar taskStatus={TaskStatus.All} />
+                <div className="flex-col flex-grow overflow-y-auto py-4 px-1">
+                    <div className="columns-2 md:columns-3 xl:columns-5 gap-4">
+                        {cardData.map((card) => (
+                            <div key={card.id} className="mb-4 break-inside-avoid">
+                                <TaskCard
+                                    title={card.title}
+                                    description={card.description}
+                                    onClick={card.onClick}
+                                />
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
         </div>
