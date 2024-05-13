@@ -1,3 +1,4 @@
+import Sidebar from "../../components/Sidebar";
 import TaskCard from "../../components/TaskCard";
 
 interface CardData {
@@ -24,21 +25,25 @@ const cardData: CardData[] = [
     // Add more cards as needed
 ];
 
-
-export default function App() {
+const App: React.FC = () => {
     return (
-        <div className="p-4">
-            <div className="columns-2 md:columns-3 xl:columns-5 gap-4">
-                {cardData.map((card) => (
-                    <div key={card.id} className="mb-4">
-                        <TaskCard
-                            title={card.title}
-                            description={card.description}
-                            onClick={card.onClick}
-                        />
-                    </div>
-                ))}
+        <div className="flex h-[90%] md:h-full">
+            <Sidebar />
+            <div className="p-4 flex flex-grow">
+                <div className="columns-2 md:columns-3 xl:columns-5 gap-4">
+                    {cardData.map((card) => (
+                        <div key={card.id} className="mb-4 break-inside-avoid">
+                            <TaskCard
+                                title={card.title}
+                                description={card.description}
+                                onClick={card.onClick}
+                            />
+                        </div>
+                    ))}
+                </div>
             </div>
         </div>
     );
-}
+};
+
+export default App;
