@@ -68,31 +68,18 @@ const App: React.FC = () => {
                     <CheckboxGroup
                         defaultValue={selectedTaskCards}
                         onValueChange={setSelectedTaskCards}
+                        classNames={{ label: "max-w-full" }}
                     >
                         <div className="columns-2 md:columns-3 xl:columns-5 gap-4">
                             {cardData.map((card) => (
-                                <>
-                                    {multiDeleteActive ?
-                                        <Checkbox value={card.id.toString()} key={card.id} className="mb-4 break-inside-avoid w-full">
-                                            <TaskCard
-                                                title={card.title}
-                                                description={card.description}
-                                                onClick={card.onClick}
-                                            />
-                                        </Checkbox >
-                                        :
-                                        <div key={card.id} className="mb-4 break-inside-avoid"
-                                        >
-                                            <TaskCard
-
-                                                title={card.title}
-                                                description={card.description}
-                                                onClick={card.onClick}
-                                            />
-                                        </div>
-                                    }
-                                </>
-
+                                <div className="mb-4 break-inside-avoid w-full" key={card.id}>
+                                    <TaskCard
+                                        title={card.title}
+                                        description={card.description}
+                                        onClick={card.onClick}
+                                        checkbox={<Checkbox className={`${!multiDeleteActive && 'hidden'}`} value={card.id.toString()} key={card.id} />}
+                                    />
+                                </div>
                             ))}
                         </div>
                     </CheckboxGroup>
