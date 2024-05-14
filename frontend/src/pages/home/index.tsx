@@ -66,7 +66,6 @@ const App: React.FC = () => {
                 )}
                 <div className="flex-col flex-grow overflow-y-auto py-4 px-1">
                     <CheckboxGroup
-                        label="Select cities"
                         defaultValue={selectedTaskCards}
                         onValueChange={setSelectedTaskCards}
                     >
@@ -74,18 +73,23 @@ const App: React.FC = () => {
                             {cardData.map((card) => (
                                 <>
                                     {multiDeleteActive ?
-                                        <Checkbox value={card.id.toString()} key={card.id} className="mb-4 break-inside-avoid">
+                                        <Checkbox value={card.id.toString()} key={card.id} className="mb-4 break-inside-avoid w-full">
                                             <TaskCard
                                                 title={card.title}
                                                 description={card.description}
                                                 onClick={card.onClick}
                                             />
-                                        </Checkbox > :
-                                        <TaskCard
-                                            title={card.title}
-                                            description={card.description}
-                                            onClick={card.onClick}
-                                        />
+                                        </Checkbox >
+                                        :
+                                        <div key={card.id} className="mb-4 break-inside-avoid"
+                                        >
+                                            <TaskCard
+
+                                                title={card.title}
+                                                description={card.description}
+                                                onClick={card.onClick}
+                                            />
+                                        </div>
                                     }
                                 </>
 
