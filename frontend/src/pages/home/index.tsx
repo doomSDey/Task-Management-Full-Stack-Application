@@ -8,7 +8,7 @@ import TaskStatusTabs from "../../components/TaskStatusTabs";
 import Topbar from "../../components/Topbar";
 import { ModalTypes, TaskStatus, TaskTabs } from "../../helpers/enums";
 
-interface CardData {
+export interface CardData {
     id: number;
     title: string;
     description: string;
@@ -75,10 +75,8 @@ const App: React.FC = () => {
                             {cardData.map((card) => (
                                 <div className="mb-4 break-inside-avoid w-full" key={card.id}>
                                     <TaskCard
-                                        title={card.title}
-                                        description={card.description}
+                                        cardData={card}
                                         onClick={card.onClick}
-                                        status={card.status as TaskStatus}
                                         statusChangeHandler={() => { }}
                                         checkbox={<Checkbox className={`${!multiDeleteActive && 'hidden'}`} value={card.id.toString()} key={card.id} />}
                                     />

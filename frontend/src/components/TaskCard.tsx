@@ -1,17 +1,17 @@
 import { Button, Card as NextUICard, CardBody, CardFooter, CardHeader, Select, SelectItem, Tooltip } from '@nextui-org/react';
 
 import { TaskStatus } from '../helpers/enums';
+import { CardData } from '../pages/home';
 
 interface TaskCardProps {
-    title: string;
-    description: string;
-    status: TaskStatus;
+    cardData: CardData;
     onClick: () => void;
-    statusChangeHandler: (status: TaskStatus) => void
+    statusChangeHandler: (status: TaskStatus) => void;
     checkbox: React.ReactElement;
 }
 
-const TaskCard: React.FC<TaskCardProps> = ({ title, description, onClick, checkbox, status, statusChangeHandler }) => {
+const TaskCard: React.FC<TaskCardProps> = ({ cardData, onClick, checkbox, statusChangeHandler }) => {
+    const { title, description, status } = cardData
     return (
         <NextUICard
             onClick={onClick}
