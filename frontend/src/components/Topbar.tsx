@@ -61,17 +61,21 @@ const Topbar: React.FC<TopbarProps> = ({ taskStatus }) => {
                         <p className="font-semibold">zoey@example.com</p>
                     </DropdownItem>
                     <DropdownSection title="Change avatar" showDivider>
-                        {
-                            avatarUrlList.map((avatar, index) => (
-                                <DropdownItem key={index} className="h-14 gap-2">
-                                    <Avatar
-                                        as="button"
-                                        className="transition-transform"
-                                        src={avatar}
-                                    />
-                                </DropdownItem>
-                            ))
-                        }
+                        <DropdownItem className="cursor-default" isReadOnly>
+                            <div className="grid grid-cols-3 gap-4 ">
+                                {
+                                    avatarUrlList.map((avatar, index) => (
+                                        <div key={index} className="flex justify-center items-center">
+                                            <Avatar
+                                                as="button"
+                                                className="transition-transform"
+                                                src={avatar}
+                                            />
+                                        </div>
+                                    ))
+                                }
+                            </div>
+                        </DropdownItem>
                     </DropdownSection>
                     <DropdownItem key="logout" color="danger">
                         Log Out
