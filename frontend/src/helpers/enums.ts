@@ -11,6 +11,13 @@ export enum TaskStatus {
     Done = 'Done',
 }
 
+export enum TaskCardBackgroundColors {
+    VariantA = '#FF5733',
+    VariantB = '#33FF57',
+    VariantC = '#3357FF',
+    VariantD = '#F0E68C',
+}
+
 export enum ModalTypes {
     Filter,
 }

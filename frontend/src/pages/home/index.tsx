@@ -12,6 +12,7 @@ export interface CardData {
     id: number;
     title: string;
     description: string;
+    color: string;
     onClick: () => void;
     status: string;
 }
@@ -23,10 +24,10 @@ export interface FilterValues {
 }
 
 const cardData: CardData[] = [
-    { id: 1, title: 'Card 1', description: 'This is a short description.', onClick: () => alert('Card 1 clicked'), status: 'Done' },
-    { id: 2, title: 'Card 2', description: 'This is a slightly longer description that will increase the card height.', onClick: () => alert('Card 2 clicked'), status: 'Done' },
-    { id: 3, title: 'Card 3', description: 'This description is very long. It will make the card significantly taller than the other cards in the grid, demonstrating the masonry layout effect.', onClick: () => alert('Card 3 clicked'), status: 'Done' },
-    { id: 4, title: 'Card 4', description: 'Description 4.', onClick: () => alert('Card 4 clicked'), status: 'Done' },
+    { id: 1, title: 'Card 1', description: 'This is a short description.', onClick: () => alert('Card 1 clicked'), status: 'Done', color:'#FF5733'},
+    { id: 2, title: 'Card 2', description: 'This is a slightly longer description that will increase the card height.', onClick: () => alert('Card 2 clicked'), status: 'Done', color:'#FF5733'},
+    { id: 3, title: 'Card 3', description: 'This description is very long. It will make the card significantly taller than the other cards in the grid, demonstrating the masonry layout effect.', onClick: () => alert('Card 3 clicked'), status: 'Done', color:'#FF5733'},
+    { id: 4, title: 'Card 4', description: 'Description 4.', onClick: () => alert('Card 4 clicked'), status: 'Done', color:'#FF5733'},
     // Add more cards as needed
     // Add more cards as needed
 ];

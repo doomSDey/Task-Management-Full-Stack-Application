@@ -1,6 +1,6 @@
-import { Button, Card as NextUICard, CardBody, CardFooter, CardHeader, Select, SelectItem, Tooltip } from '@nextui-org/react';
+import { Button, Card as NextUICard, CardBody, CardFooter, CardHeader, Select, SelectItem, Tooltip, Badge, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react';
 
-import { TaskStatus } from '../helpers/enums';
+import { TaskCardBackgroundColors, TaskStatus } from '../helpers/enums';
 import { CardData } from '../pages/home';
 
 interface TaskCardProps {
@@ -16,9 +16,32 @@ const TaskCard: React.FC<TaskCardProps> = ({ cardData, onClick, checkbox, status
         <NextUICard
             onClick={onClick}
             className="cursor-pointer p-4 hover:shadow-lg transition-shadow duration-300 max-h-96 min-h-32 flex flex-col"
+            style={{ background: cardData.color }}
         >
             <CardHeader className="pb-0 pt-2 px-4 flex-col gap-2 items-start">
-                {checkbox}
+                <div className='w-full flex justify-between'>
+                    <div>
+                        {checkbox}
+                    </div>
+                    <Dropdown placement="bottom-end">
+                        <DropdownTrigger>
+                            <Button size='sm' variant='bordered' isIconOnly radius="full" aria-label="Colors" style={{ backgroundColor: cardData.color }}>
+                            </Button>
+                        </DropdownTrigger>
+                        <DropdownMenu aria-label="Available Colors" variant="flat">
+                            <DropdownItem className="cursor-default" isReadOnly>
+                                <div className="flex gap-4 ">
+                                    {
+                                        Object.values(TaskCardBackgroundColors).map((color) => (
+                                            <Button key={color} size='sm' isIconOnly radius="full" aria-label={color} style={{ backgroundColor: color }}>
+                                            </Button>
+                                        ))
+                                    }
+                                </div>
+                            </DropdownItem>
+                        </DropdownMenu>
+                    </Dropdown>
+                </div>
                 <h4 className="text-lg font-semibold mb-2">{title}</h4>
             </CardHeader>
             <CardBody className="overflow-visible py-2">
@@ -48,9 +71,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ cardData, onClick, checkbox, status
                             <i className="bi bi-trash"></i>
                         </Button>
                     </Tooltip>
-
                 </div>
-
             </CardFooter>
         </NextUICard >
     );
