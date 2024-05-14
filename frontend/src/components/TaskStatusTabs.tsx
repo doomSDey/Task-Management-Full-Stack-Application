@@ -1,10 +1,10 @@
 import { Tab, Tabs } from "@nextui-org/react"
 
-import { TaskStatus } from "../helpers/enums"
+import { TaskTabs } from "../helpers/enums"
 
 interface TaskStatusTabsProps {
-    selectedKey: TaskStatus,
-    setSelectedKey: (key: TaskStatus) => void
+    selectedKey: TaskTabs,
+    setSelectedKey: (key: TaskTabs) => void
 }
 
 const TaskStatusTabs: React.FC<TaskStatusTabsProps> = ({ selectedKey, setSelectedKey }) => {
@@ -13,12 +13,12 @@ const TaskStatusTabs: React.FC<TaskStatusTabsProps> = ({ selectedKey, setSelecte
             <Tabs
                 aria-label="Options"
                 selectedKey={selectedKey}
-                onSelectionChange={(e)=>setSelectedKey(e as TaskStatus)}
+                onSelectionChange={(e)=>setSelectedKey(e as TaskTabs)}
             >
-                <Tab key={TaskStatus.All} title="All Tasks" />
-                <Tab key={TaskStatus.ToDo} title="To Do Tasks" />
-                <Tab key={TaskStatus.InProgress} title="In Progress Tasks" />
-                <Tab key={TaskStatus.Done} title="Done Tasks" />
+                <Tab key={TaskTabs.All} title="All Tasks" />
+                <Tab key={TaskTabs.ToDo} title="To Do Tasks" />
+                <Tab key={TaskTabs.InProgress} title="In Progress Tasks" />
+                <Tab key={TaskTabs.Done} title="Done Tasks" />
             </Tabs>
         </div>
     )

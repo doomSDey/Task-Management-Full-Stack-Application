@@ -1,10 +1,10 @@
 import { Avatar, Badge, Button, Divider, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger, Input } from "@nextui-org/react"
 import Image from 'next/image'
 
-import { TaskStatus } from "../helpers/enums";
+import { TaskTabs } from "../helpers/enums";
 
 interface TopbarProps {
-    taskStatus: TaskStatus;
+    taskStatus: TaskTabs;
 }
 
 const avatarUrlList = [

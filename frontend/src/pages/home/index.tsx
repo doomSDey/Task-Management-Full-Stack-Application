@@ -6,13 +6,14 @@ import Sidebar from "../../components/Sidebar";
 import TaskCard from "../../components/TaskCard";
 import TaskStatusTabs from "../../components/TaskStatusTabs";
 import Topbar from "../../components/Topbar";
-import { ModalTypes, TaskStatus } from "../../helpers/enums";
+import { ModalTypes, TaskStatus, TaskTabs } from "../../helpers/enums";
 
 interface CardData {
     id: number;
     title: string;
     description: string;
     onClick: () => void;
+    status: string;
 }
 export interface FilterValues {
     startDate: string | null,
@@ -22,16 +23,16 @@ export interface FilterValues {
 }
 
 const cardData: CardData[] = [
-    { id: 1, title: 'Card 1', description: 'This is a short description.', onClick: () => alert('Card 1 clicked') },
-    { id: 2, title: 'Card 2', description: 'This is a slightly longer description that will increase the card height.', onClick: () => alert('Card 2 clicked') },
-    { id: 3, title: 'Card 3', description: 'This description is very long. It will make the card significantly taller than the other cards in the grid, demonstrating the masonry layout effect.', onClick: () => alert('Card 3 clicked') },
-    { id: 4, title: 'Card 4', description: 'Description 4.', onClick: () => alert('Card 4 clicked') },
+    { id: 1, title: 'Card 1', description: 'This is a short description.', onClick: () => alert('Card 1 clicked'), status: 'Done' },
+    { id: 2, title: 'Card 2', description: 'This is a slightly longer description that will increase the card height.', onClick: () => alert('Card 2 clicked'), status: 'Done' },
+    { id: 3, title: 'Card 3', description: 'This description is very long. It will make the card significantly taller than the other cards in the grid, demonstrating the masonry layout effect.', onClick: () => alert('Card 3 clicked'), status: 'Done' },
+    { id: 4, title: 'Card 4', description: 'Description 4.', onClick: () => alert('Card 4 clicked'), status: 'Done' },
     // Add more cards as needed
     // Add more cards as needed
 ];
 
 const App: React.FC = () => {
-    const [selectedTab, setSelectedTab] = useState(TaskStatus.All);
+    const [selectedTab, setSelectedTab] = useState(TaskTabs.All);
     const [modalType, setModalType] = useState(ModalTypes.Filter);
     const [selectedTaskCards, setSelectedTaskCards] = useState<string[]>([]);
     const [multiDeleteActive, setMultiDeleteActive] = useState(false);
@@ -48,7 +49,7 @@ const App: React.FC = () => {
         <div className="flex h-[90%] md:h-full">
             <Sidebar onOpen={onOpen} setModalType={setModalType} setMultiDeleteActive={setMultiDeleteActive} />
             <div className="p-4 flex flex-col flex-grow">
-                <Topbar taskStatus={TaskStatus.All} />
+                <Topbar taskStatus={TaskTabs.All} />
                 <TaskStatusTabs selectedKey={selectedTab} setSelectedKey={setSelectedTab} />
                 {isAnyFilterActive &&
                     <div className="flex space-x-2 py-2 px-2 items-center w-full overflow-hidden">
@@ -77,6 +78,8 @@ const App: React.FC = () => {
                                         title={card.title}
                                         description={card.description}
                                         onClick={card.onClick}
+                                        status={card.status as TaskStatus}
+                                        statusChangeHandler={() => { }}
                                         checkbox={<Checkbox className={`${!multiDeleteActive && 'hidden'}`} value={card.id.toString()} key={card.id} />}
                                     />
                                 </div>
