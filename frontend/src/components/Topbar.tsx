@@ -1,4 +1,4 @@
-import { Avatar, Button, Divider, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger, Input } from "@nextui-org/react"
+import { Avatar, Badge, Button, Divider, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger, Input } from "@nextui-org/react"
 import Image from 'next/image'
 
 import { TaskStatus } from "../helpers/enums";
@@ -67,11 +67,13 @@ const Topbar: React.FC<TopbarProps> = ({ taskStatus }) => {
     const NotificationComponent = () => {
         return (
             <Dropdown placement="bottom-end">
-                <DropdownTrigger>
-                    <Button isIconOnly aria-label="Notification">
-                        <i className="bi bi-bell"></i>
-                    </Button>
-                </DropdownTrigger>
+                <Badge content={notificationList.length} color="primary">
+                    <DropdownTrigger>
+                        <Button isIconOnly aria-label="Notification">
+                            <i className="bi bi-bell"></i>
+                        </Button>
+                    </DropdownTrigger>
+                </Badge>
                 <DropdownMenu aria-label="Notification List" variant="flat">
                     <DropdownItem className="cursor-default" isReadOnly>
                         {
