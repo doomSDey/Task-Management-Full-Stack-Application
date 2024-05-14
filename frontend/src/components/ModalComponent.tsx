@@ -128,6 +128,7 @@ const ModalBodyComponent: React.FC<ModalBodyComponentProps> = ({ type, initialVa
                 </Formik>
             );
         case ModalTypes.EditTask:
+        case ModalTypes.ViewTask:
             return (
                 <Formik
                     initialValues={initialValues!}
@@ -143,7 +144,7 @@ const ModalBodyComponent: React.FC<ModalBodyComponentProps> = ({ type, initialVa
                                     <label className="font-semibold">Title</label>
                                     <Field name="title">
                                         {({ field }: FieldProps) => (
-                                            <Input {...field} placeholder="Title" className="w-full" />
+                                            <Input {...field} disabled={ModalTypes.ViewTask === type} placeholder="Title" className="w-full" />
                                         )}
                                     </Field>
                                 </div>
@@ -151,7 +152,7 @@ const ModalBodyComponent: React.FC<ModalBodyComponentProps> = ({ type, initialVa
                                     <label className="font-semibold">Description</label>
                                     <Field name="description">
                                         {({ field }: FieldProps) => (
-                                            <Textarea {...field} placeholder="Description" className="w-full" />
+                                            <Textarea {...field} disabled={ModalTypes.ViewTask === type} placeholder="Description" className="w-full" />
                                         )}
                                     </Field>
                                 </div>
@@ -161,6 +162,7 @@ const ModalBodyComponent: React.FC<ModalBodyComponentProps> = ({ type, initialVa
                                         {({ field }: FieldProps) => (
                                             <DatePicker
                                                 {...field}
+                                                isDisabled={ModalTypes.ViewTask === type}
                                                 placeholder="Due Date"
                                                 className="w-full"
                                                 onChange={(date) => setFieldValue('dueDate', date)}
@@ -174,6 +176,7 @@ const ModalBodyComponent: React.FC<ModalBodyComponentProps> = ({ type, initialVa
                                         {({ field }: FieldProps) => (
                                             <Select
                                                 {...field}
+                                                isDisabled={ModalTypes.ViewTask === type}
                                                 placeholder="Select current status"
                                                 selectedKeys={[field.value]}
                                                 onSelectionChange={(value) => setFieldValue('status', value)}
@@ -198,7 +201,11 @@ const ModalBodyComponent: React.FC<ModalBodyComponentProps> = ({ type, initialVa
                                                         key={color}
                                                         className={`w-8 h-8 rounded-full cursor-pointer ${field.value === color ? 'border-2 border-black' : ''}`}
                                                         style={{ backgroundColor: color }}
-                                                        onClick={() => setFieldValue('color', color)}
+                                                        onClick={() => {
+                                                            if (ModalTypes.ViewTask === type)
+                                                                return;
+                                                            setFieldValue('color', color)
+                                                        }}
                                                     ></div>
                                                 ))}
                                             </div>
@@ -211,7 +218,9 @@ const ModalBodyComponent: React.FC<ModalBodyComponentProps> = ({ type, initialVa
                                     Cancel
                                 </Button>
                                 <Button type="submit">
-                                    Save
+                                    {
+                                        ModalTypes.ViewTask === type ? 'Edit' : 'Save'
+                                    }
                                 </Button>
                             </ModalFooter>
                         </Form>

@@ -53,10 +53,11 @@ const App: React.FC = () => {
             case ModalTypes.Filter:
                 return filterData
             case ModalTypes.EditTask:
+            case ModalTypes.ViewTask:
                 return currentTask
         }
     }
-    
+
     return (
         <div className="flex h-[90%] md:h-full">
             <Sidebar onOpen={onOpen} setModalType={setModalType} setMultiDeleteActive={setMultiDeleteActive} />
@@ -85,10 +86,9 @@ const App: React.FC = () => {
                     >
                         <div className="columns-2 md:columns-3 xl:columns-5 gap-4">
                             {cardData.map((card) => (
-                                <div className="mb-4 break-inside-avoid w-full" key={card.id}>
+                                <div className="mb-4 break-inside-avoid w-full" key={card.id} onClick={() => { setModalType(ModalTypes.ViewTask); setCurrentTask(card); onOpen(); }}>
                                     <TaskCard
                                         cardData={card}
-                                        onClick={card.onClick}
                                         statusChangeHandler={() => { }}
                                         checkbox={<Checkbox className={`${!multiDeleteActive && 'hidden'}`} value={card.id.toString()} key={card.id} />}
                                         onEditButtonClick={() => { setModalType(ModalTypes.EditTask); setCurrentTask(card); onOpen(); }}
@@ -103,8 +103,18 @@ const App: React.FC = () => {
             <ModalComponenet type={modalType}
                 initialValues={initialDataAccordingToModal()}
                 onAccept={function (arg0: FilterValues | CardData): void {
-                    setFilterData(arg0 as FilterValues)
-                    onClose()
+                    switch (modalType) {
+                        case ModalTypes.Filter:
+                            setFilterData(arg0 as FilterValues);
+                            onClose();
+                            break;
+                        case ModalTypes.ViewTask:
+                            setModalType(ModalTypes.EditTask);
+                            break;
+                        default:
+                            return undefined;
+                    }
+
                 }}
                 onDecline={function (): void {
                     throw new Error("Function not implemented.");

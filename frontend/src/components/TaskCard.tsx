@@ -5,17 +5,15 @@ import { CardData } from '../pages/home';
 
 interface TaskCardProps {
     cardData: CardData;
-    onClick: () => void;
     statusChangeHandler: (status: TaskStatus) => void;
     onEditButtonClick: () => void
     checkbox: React.ReactElement;
 }
 
-const TaskCard: React.FC<TaskCardProps> = ({ cardData, onClick, checkbox, statusChangeHandler, onEditButtonClick }) => {
+const TaskCard: React.FC<TaskCardProps> = ({ cardData, checkbox, statusChangeHandler, onEditButtonClick }) => {
     const { title, description, status } = cardData
     return (
         <NextUICard
-            onClick={onClick}
             className="cursor-pointer p-4 hover:shadow-lg transition-shadow duration-300 max-h-96 min-h-32 flex flex-col"
             style={{ background: cardData.color }}
         >
