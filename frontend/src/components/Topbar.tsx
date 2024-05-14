@@ -29,7 +29,7 @@ const Topbar: React.FC<TopbarProps> = ({ taskStatus }) => {
                     <Avatar
                         isBordered
                         as="button"
-                        className="transition-transform hidden md:block"
+                        className="transition-transform"
                         src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
                     />
                 </DropdownTrigger>
@@ -91,24 +91,19 @@ const Topbar: React.FC<TopbarProps> = ({ taskStatus }) => {
 
     return (
         <div className="flex flex-col md:flex-row gap-4 py-4">
-            <div className="flex justify-between items-center w-full md:w-auto">
-                <Avatar
-                    isBordered
-                    as="button"
-                    className="transition-transform md:hidden"
-                    src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
-                />
-                <Image className="md:hidden mx-auto" src='/logo.png' width={70} height={100} alt='logo' />
-                <Button isIconOnly aria-label="Notification" className="md:hidden">
-                    <i className="bi bi-bell"></i>
-                </Button>
+            {/* Logo, Profile, and Notification for small screens */}
+            <div className="flex md:hidden justify-between items-center w-full">
+                <ProfileComponent />
+                <Image className="mx-auto" src='/logo.png' width={70} height={100} alt='logo' />
+                <NotificationComponent />
             </div>
-            <div className="w-full">
+            {/* Search bar for small screens */}
+            <div className="md:hidden w-full">
                 <Input
                     type="text"
                     placeholder={`Search in ${taskStatus}`}
                     labelPlacement="outside"
-                    className="w-full md:w-auto"
+                    className="w-full"
                     endContent={
                         <Button isIconOnly variant="ghost" className="outline-none border-none" aria-label="Search">
                             <i className="bi bi-search"></i>
@@ -116,8 +111,22 @@ const Topbar: React.FC<TopbarProps> = ({ taskStatus }) => {
                     }
                 />
             </div>
-            <NotificationComponent />
-            <ProfileComponent />
+            {/* Search bar, Notification, and Profile for larger screens */}
+            <div className="hidden md:flex md:items-center w-full gap-4">
+                <Input
+                    type="text"
+                    placeholder={`Search in ${taskStatus}`}
+                    labelPlacement="outside"
+                    className="flex-grow"
+                    endContent={
+                        <Button isIconOnly variant="ghost" className="outline-none border-none" aria-label="Search">
+                            <i className="bi bi-search"></i>
+                        </Button>
+                    }
+                />
+                <NotificationComponent />
+                <ProfileComponent />
+            </div>
         </div>
     );
 };
