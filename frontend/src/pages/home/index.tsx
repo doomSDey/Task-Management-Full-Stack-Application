@@ -47,6 +47,7 @@ const App: React.FC = () => {
         sortOption: null,
         sortOrder: null
     });
+    const isAnyFilterActive = Object.values(filterData).some(value => value !== null);
     const { isOpen, onOpenChange, onClose, onOpen } = useDisclosure();
 
     return (
@@ -55,6 +56,11 @@ const App: React.FC = () => {
             <div className="p-4 flex flex-col flex-grow">
                 <Topbar taskStatus={TaskStatus.All} />
                 <TaskStatusTabs selectedKey={selectedTab} setSelectedKey={setSelectedTab} />
+                {isAnyFilterActive &&
+                    <div className=" py-2 px-2">
+                        <p className="hover:cursor-pointer hover:underline w-fit text-danger" onClick={() => setFilterData({ startDate: null, endDate: null, sortOption: null, sortOrder: null })}>Clear Filter</p>
+                    </div>
+                }
                 <div className="flex-col flex-grow overflow-y-auto py-4 px-1">
                     <div className="columns-2 md:columns-3 xl:columns-5 gap-4">
                         {cardData.map((card) => (
