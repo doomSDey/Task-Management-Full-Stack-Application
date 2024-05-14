@@ -1,5 +1,7 @@
+import { useState } from "react";
 import Sidebar from "../../components/Sidebar";
 import TaskCard from "../../components/TaskCard";
+import TaskStatusTabs from "../../components/TaskStatusTabs";
 import Topbar from "../../components/Topbar";
 import { TaskStatus } from "../../helpers/enums";
 
@@ -28,11 +30,14 @@ const cardData: CardData[] = [
 ];
 
 const App: React.FC = () => {
+    const [selectedTab, setSelectedTab] = useState(TaskStatus.All);
+
     return (
         <div className="flex h-[90%] md:h-full">
             <Sidebar />
             <div className="p-4 flex flex-col flex-grow">
                 <Topbar taskStatus={TaskStatus.All} />
+                <TaskStatusTabs selectedKey={selectedTab} setSelectedKey={setSelectedTab}/>
                 <div className="flex-col flex-grow overflow-y-auto py-4 px-1">
                     <div className="columns-2 md:columns-3 xl:columns-5 gap-4">
                         {cardData.map((card) => (
