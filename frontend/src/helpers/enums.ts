@@ -4,3 +4,7 @@ export enum TaskStatus {
     InProgress = "In Progress",
     Done = "Done"
 }
+
+export enum ModalTypes {
+    Filter
+}
