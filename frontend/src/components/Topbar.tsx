@@ -1,4 +1,4 @@
-import { Avatar, Button, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger, Input } from "@nextui-org/react"
+import { Avatar, Button, Divider, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger, Input } from "@nextui-org/react"
 import Image from 'next/image'
 
 import { TaskStatus } from "../helpers/enums";
@@ -14,37 +14,16 @@ const avatarUrlList = [
     'https://i.pravatar.cc/150?u=a042581f4e29026704d',
 ]
 
+const notificationList = [
+    { id: 1, title: "test" },
+    { id: 2, title: "test1" },
+    { id: 3, title: "test2" },
+]
+
 const Topbar: React.FC<TopbarProps> = ({ taskStatus }) => {
-    return (
-        <div className="flex flex-col md:flex-row gap-4 py-4">
-            <div className="flex justify-between items-center w-full md:w-auto">
-                <Avatar
-                    isBordered
-                    as="button"
-                    className="transition-transform md:hidden"
-                    src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
-                />
-                <Image className="md:hidden mx-auto" src='/logo.png' width={70} height={100} alt='logo' />
-                <Button isIconOnly aria-label="Notification" className="md:hidden">
-                    <i className="bi bi-bell"></i>
-                </Button>
-            </div>
-            <div className="w-full">
-                <Input
-                    type="text"
-                    placeholder={`Search in ${taskStatus}`}
-                    labelPlacement="outside"
-                    className="w-full md:w-auto"
-                    endContent={
-                        <Button isIconOnly variant="ghost" className="outline-none border-none" aria-label="Search">
-                            <i className="bi bi-search"></i>
-                        </Button>
-                    }
-                />
-            </div>
-            <Button isIconOnly aria-label="Notification" className="hidden md:block">
-                <i className="bi bi-bell"></i>
-            </Button>
+
+    const ProfileComponent = () => {
+        return (
             <Dropdown placement="bottom-end">
                 <DropdownTrigger>
                     <Avatar
@@ -82,6 +61,63 @@ const Topbar: React.FC<TopbarProps> = ({ taskStatus }) => {
                     </DropdownItem>
                 </DropdownMenu>
             </Dropdown>
+        )
+    }
+
+    const NotificationComponent = () => {
+        return (
+            <Dropdown placement="bottom-end">
+                <DropdownTrigger>
+                    <Button isIconOnly aria-label="Notification">
+                        <i className="bi bi-bell"></i>
+                    </Button>
+                </DropdownTrigger>
+                <DropdownMenu aria-label="Notification List" variant="flat">
+                    <DropdownItem className="cursor-default" isReadOnly>
+                        {
+                            notificationList.map((notification, index) => (
+                                <div key={index} className="w-full">
+                                    <Button variant="ghost" className="w-full flex items-center justify-start space-x-2 border-none max-w-48" startContent={<i className="bi bi-bell"></i>}>
+                                        <p className="text-ellipsis overflow-hidden whitespace-nowrap">{notification.title} is due today</p>
+                                    </Button>
+                                </div>
+                            ))
+                        }
+                    </DropdownItem>
+                </DropdownMenu>
+            </Dropdown>
+        )
+    }
+
+    return (
+        <div className="flex flex-col md:flex-row gap-4 py-4">
+            <div className="flex justify-between items-center w-full md:w-auto">
+                <Avatar
+                    isBordered
+                    as="button"
+                    className="transition-transform md:hidden"
+                    src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+                />
+                <Image className="md:hidden mx-auto" src='/logo.png' width={70} height={100} alt='logo' />
+                <Button isIconOnly aria-label="Notification" className="md:hidden">
+                    <i className="bi bi-bell"></i>
+                </Button>
+            </div>
+            <div className="w-full">
+                <Input
+                    type="text"
+                    placeholder={`Search in ${taskStatus}`}
+                    labelPlacement="outside"
+                    className="w-full md:w-auto"
+                    endContent={
+                        <Button isIconOnly variant="ghost" className="outline-none border-none" aria-label="Search">
+                            <i className="bi bi-search"></i>
+                        </Button>
+                    }
+                />
+            </div>
+            <NotificationComponent />
+            <ProfileComponent />
         </div>
     );
 };
