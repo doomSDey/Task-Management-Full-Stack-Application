@@ -27,9 +27,17 @@ const ModalHeaderComponent: React.FC<Partial<ModalComponentProps>> = ({ type }) 
             return (
                 <ModalHeader className="flex flex-col gap-1">Filters</ModalHeader>
             );
+        case ModalTypes.CreateTask:
+            return (
+                <ModalHeader className="flex flex-col gap-1">Add a New Task</ModalHeader>
+            );
         case ModalTypes.EditTask:
             return (
                 <ModalHeader className="flex flex-col gap-1">Edit Task</ModalHeader>
+            );
+        case ModalTypes.ViewTask:
+            return (
+                <ModalHeader className="flex flex-col gap-1">View Task</ModalHeader>
             );
         default:
             return null;
