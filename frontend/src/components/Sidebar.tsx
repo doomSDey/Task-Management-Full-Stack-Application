@@ -19,7 +19,7 @@ const Sidebar: React.FC<SidebarProps> = ({ setModalType, onOpen, setMultiDeleteA
                     <Button isIconOnly aria-label="Filters" onPress={() => { setModalType(ModalTypes.Filter), onOpen() }}>
                         <i className="bi bi-funnel"></i>
                     </Button>
-                    <Button isIconOnly aria-label="Add Task">
+                    <Button isIconOnly aria-label="Add Task" onPress={() => { setModalType(ModalTypes.CreateTask), onOpen() }}>
                         <i className="bi bi-plus-lg"></i>
                     </Button>
                     <Button isIconOnly color="warning" aria-label="Delete Tasks" onClick={() => { setMultiDeleteActive((prevData: boolean) => !prevData) }}>

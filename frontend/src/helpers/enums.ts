@@ -20,6 +20,7 @@ export enum TaskCardBackgroundColors {
 
 export enum ModalTypes {
     Filter,
+    CreateTask,
     EditTask,
     ViewTask
 }

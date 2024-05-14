@@ -6,9 +6,9 @@ import { ModalTypes, TaskCardBackgroundColors, TaskStatus } from "../helpers/enu
 import { CardData, FilterValues } from "../pages/home";
 
 interface ModalComponentProps {
-    initialValues?: FilterValues | CardData,
+    initialValues?: FilterValues | Partial<CardData>,
     type: ModalTypes,
-    onAccept: (arg0: FilterValues | CardData) => void,
+    onAccept: (arg0: FilterValues | Partial<CardData>) => void,
     onDecline: () => void,
     isOpen: boolean,
     onOpenChange: () => void,
@@ -16,9 +16,9 @@ interface ModalComponentProps {
 
 interface ModalBodyComponentProps {
     type: ModalTypes,
-    initialValues?: FilterValues | CardData,
+    initialValues?: FilterValues | Partial<CardData>,
     onClose: () => void,
-    onAccept: (arg0: FilterValues | CardData) => void,
+    onAccept: (arg0: FilterValues | Partial<CardData>) => void,
 }
 
 const ModalHeaderComponent: React.FC<Partial<ModalComponentProps>> = ({ type }) => {
@@ -127,6 +127,7 @@ const ModalBodyComponent: React.FC<ModalBodyComponentProps> = ({ type, initialVa
                     )}
                 </Formik>
             );
+        case ModalTypes.CreateTask:
         case ModalTypes.EditTask:
         case ModalTypes.ViewTask:
             return (
