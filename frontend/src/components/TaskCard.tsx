@@ -7,10 +7,11 @@ interface TaskCardProps {
     cardData: CardData;
     onClick: () => void;
     statusChangeHandler: (status: TaskStatus) => void;
+    onEditButtonClick: () => void
     checkbox: React.ReactElement;
 }
 
-const TaskCard: React.FC<TaskCardProps> = ({ cardData, onClick, checkbox, statusChangeHandler }) => {
+const TaskCard: React.FC<TaskCardProps> = ({ cardData, onClick, checkbox, statusChangeHandler, onEditButtonClick }) => {
     const { title, description, status } = cardData
     return (
         <NextUICard
@@ -64,7 +65,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ cardData, onClick, checkbox, status
                         ))}
                     </Select>
                     <Tooltip content="Edit">
-                        <Button size='sm' isIconOnly aria-label="Edit Task"><i className="bi bi-pencil"></i></Button>
+                        <Button size='sm' isIconOnly aria-label="Edit Task" onPress={onEditButtonClick}><i className="bi bi-pencil"></i></Button>
                     </Tooltip>
                     <Tooltip content="Delete">
                         <Button size='sm' isIconOnly color="warning" aria-label="Delete Tasks">

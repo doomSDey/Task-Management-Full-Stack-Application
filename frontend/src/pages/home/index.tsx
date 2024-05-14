@@ -12,9 +12,10 @@ export interface CardData {
     id: number;
     title: string;
     description: string;
-    color: string;
     onClick: () => void;
     status: string;
+    color?: string;
+    dueData?: string;
 }
 export interface FilterValues {
     startDate: string | null,
@@ -24,10 +25,10 @@ export interface FilterValues {
 }
 
 const cardData: CardData[] = [
-    { id: 1, title: 'Card 1', description: 'This is a short description.', onClick: () => alert('Card 1 clicked'), status: 'Done', color:'#FF5733'},
-    { id: 2, title: 'Card 2', description: 'This is a slightly longer description that will increase the card height.', onClick: () => alert('Card 2 clicked'), status: 'Done', color:'#FF5733'},
-    { id: 3, title: 'Card 3', description: 'This description is very long. It will make the card significantly taller than the other cards in the grid, demonstrating the masonry layout effect.', onClick: () => alert('Card 3 clicked'), status: 'Done', color:'#FF5733'},
-    { id: 4, title: 'Card 4', description: 'Description 4.', onClick: () => alert('Card 4 clicked'), status: 'Done', color:'#FF5733'},
+    { id: 1, title: 'Card 1', description: 'This is a short description.', onClick: () => alert('Card 1 clicked'), status: 'Done', color: '#FF5733' },
+    { id: 2, title: 'Card 2', description: 'This is a slightly longer description that will increase the card height.', onClick: () => alert('Card 2 clicked'), status: 'Done', color: '#FF5733' },
+    { id: 3, title: 'Card 3', description: 'This description is very long. It will make the card significantly taller than the other cards in the grid, demonstrating the masonry layout effect.', onClick: () => alert('Card 3 clicked'), status: 'Done', color: '#FF5733' },
+    { id: 4, title: 'Card 4', description: 'Description 4.', onClick: () => alert('Card 4 clicked'), status: 'Done', color: '#FF5733' },
     // Add more cards as needed
     // Add more cards as needed
 ];
@@ -36,6 +37,7 @@ const App: React.FC = () => {
     const [selectedTab, setSelectedTab] = useState(TaskTabs.All);
     const [modalType, setModalType] = useState(ModalTypes.Filter);
     const [selectedTaskCards, setSelectedTaskCards] = useState<string[]>([]);
+    const [currentTask, setCurrentTask] = useState<CardData>();
     const [multiDeleteActive, setMultiDeleteActive] = useState(false);
     const [filterData, setFilterData] = useState<FilterValues>({
         startDate: null,
@@ -46,6 +48,15 @@ const App: React.FC = () => {
     const isAnyFilterActive = Object.values(filterData).some(value => value !== null);
     const { isOpen, onOpenChange, onClose, onOpen } = useDisclosure();
 
+    const initialDataAccordingToModal = () => {
+        switch (modalType) {
+            case ModalTypes.Filter:
+                return filterData
+            case ModalTypes.EditTask:
+                return currentTask
+        }
+    }
+    
     return (
         <div className="flex h-[90%] md:h-full">
             <Sidebar onOpen={onOpen} setModalType={setModalType} setMultiDeleteActive={setMultiDeleteActive} />
@@ -80,6 +91,7 @@ const App: React.FC = () => {
                                         onClick={card.onClick}
                                         statusChangeHandler={() => { }}
                                         checkbox={<Checkbox className={`${!multiDeleteActive && 'hidden'}`} value={card.id.toString()} key={card.id} />}
+                                        onEditButtonClick={() => { setModalType(ModalTypes.EditTask); setCurrentTask(card); onOpen(); }}
                                     />
                                 </div>
                             ))}
@@ -89,9 +101,9 @@ const App: React.FC = () => {
                 </div>
             </div>
             <ModalComponenet type={modalType}
-                initialValues={filterData}
-                onAccept={function (arg0: FilterValues): void {
-                    setFilterData(arg0)
+                initialValues={initialDataAccordingToModal()}
+                onAccept={function (arg0: FilterValues | CardData): void {
+                    setFilterData(arg0 as FilterValues)
                     onClose()
                 }}
                 onDecline={function (): void {

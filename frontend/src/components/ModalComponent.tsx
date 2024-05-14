@@ -1,14 +1,14 @@
 import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/modal"
-import { Button, DatePicker, Radio, RadioGroup } from "@nextui-org/react"
-import { Field, FieldProps,Form, Formik } from "formik";
+import { Button, Checkbox, DatePicker, Input, Radio, RadioGroup, Select, SelectItem, Textarea } from "@nextui-org/react"
+import { Field, FieldProps, Form, Formik } from "formik";
 
-import { ModalTypes } from "../helpers/enums"
-import { FilterValues } from "../pages/home";
+import { ModalTypes, TaskCardBackgroundColors, TaskStatus } from "../helpers/enums"
+import { CardData, FilterValues } from "../pages/home";
 
 interface ModalComponentProps {
-    initialValues?: FilterValues,
+    initialValues?: FilterValues | CardData,
     type: ModalTypes,
-    onAccept: (arg0: FilterValues) => void,
+    onAccept: (arg0: FilterValues | CardData) => void,
     onDecline: () => void,
     isOpen: boolean,
     onOpenChange: () => void,
@@ -16,9 +16,9 @@ interface ModalComponentProps {
 
 interface ModalBodyComponentProps {
     type: ModalTypes,
-    initialValues?: FilterValues,
+    initialValues?: FilterValues | CardData,
     onClose: () => void,
-    onAccept: (arg0: FilterValues) => void,
+    onAccept: (arg0: FilterValues | CardData) => void,
 }
 
 const ModalHeaderComponent: React.FC<Partial<ModalComponentProps>> = ({ type }) => {
@@ -27,12 +27,14 @@ const ModalHeaderComponent: React.FC<Partial<ModalComponentProps>> = ({ type }) 
             return (
                 <ModalHeader className="flex flex-col gap-1">Filters</ModalHeader>
             );
+        case ModalTypes.EditTask:
+            return (
+                <ModalHeader className="flex flex-col gap-1">Edit Task</ModalHeader>
+            );
         default:
             return null;
     }
 };
-
-
 
 const ModalBodyComponent: React.FC<ModalBodyComponentProps> = ({ type, initialValues, onClose, onAccept }) => {
     switch (type) {
@@ -125,12 +127,101 @@ const ModalBodyComponent: React.FC<ModalBodyComponentProps> = ({ type, initialVa
                     )}
                 </Formik>
             );
+        case ModalTypes.EditTask:
+            return (
+                <Formik
+                    initialValues={initialValues!}
+                    onSubmit={(values) => {
+                        console.log(values);
+                        onAccept(values);
+                    }}
+                >
+                    {({ setFieldValue }) => (
+                        <Form className="space-y-4">
+                            <ModalBody>
+                                <div className="flex flex-col space-y-2">
+                                    <label className="font-semibold">Title</label>
+                                    <Field name="title">
+                                        {({ field }: FieldProps) => (
+                                            <Input {...field} placeholder="Title" className="w-full" />
+                                        )}
+                                    </Field>
+                                </div>
+                                <div className="flex flex-col space-y-2">
+                                    <label className="font-semibold">Description</label>
+                                    <Field name="description">
+                                        {({ field }: FieldProps) => (
+                                            <Textarea {...field} placeholder="Description" className="w-full" />
+                                        )}
+                                    </Field>
+                                </div>
+                                <div className="flex flex-col space-y-2">
+                                    <label className="font-semibold">Due Date (Optional)</label>
+                                    <Field name="dueDate">
+                                        {({ field }: FieldProps) => (
+                                            <DatePicker
+                                                {...field}
+                                                placeholder="Due Date"
+                                                className="w-full"
+                                                onChange={(date) => setFieldValue('dueDate', date)}
+                                            />
+                                        )}
+                                    </Field>
+                                </div>
+                                <div className="flex flex-col space-y-2">
+                                    <label className="font-semibold">Status</label>
+                                    <Field name="status">
+                                        {({ field }: FieldProps) => (
+                                            <Select
+                                                {...field}
+                                                placeholder="Select current status"
+                                                selectedKeys={[field.value]}
+                                                onSelectionChange={(value) => setFieldValue('status', value)}
+                                                size='sm'
+                                            >
+                                                {Object.values(TaskStatus).map((item) => (
+                                                    <SelectItem key={item} value={item}>
+                                                        {item}
+                                                    </SelectItem>
+                                                ))}
+                                            </Select>
+                                        )}
+                                    </Field>
+                                </div>
+                                <div className="flex flex-col space-y-2">
+                                    <label className="font-semibold">Color (Optional)</label>
+                                    <Field name="color">
+                                        {({ field }: FieldProps) => (
+                                            <div className="flex gap-4">
+                                                {Object.values(TaskCardBackgroundColors).map((color) => (
+                                                    <div
+                                                        key={color}
+                                                        className={`w-8 h-8 rounded-full cursor-pointer ${field.value === color ? 'border-2 border-black' : ''}`}
+                                                        style={{ backgroundColor: color }}
+                                                        onClick={() => setFieldValue('color', color)}
+                                                    ></div>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </Field>
+                                </div>
+                            </ModalBody>
+                            <ModalFooter>
+                                <Button variant="flat" type="button" onPress={onClose}>
+                                    Cancel
+                                </Button>
+                                <Button type="submit">
+                                    Save
+                                </Button>
+                            </ModalFooter>
+                        </Form>
+                    )}
+                </Formik>
+            );
         default:
             return null;
     }
 };
-
-
 
 const ModalComponenet: React.FC<ModalComponentProps> = ({ type, isOpen, onOpenChange, onAccept, initialValues }) => {
     return (
@@ -139,7 +230,7 @@ const ModalComponenet: React.FC<ModalComponentProps> = ({ type, isOpen, onOpenCh
                 {(onClose) => (
                     <>
                         <ModalHeaderComponent type={type} />
-                        <ModalBodyComponent type={type} initialValues={initialValues} onClose={onClose} onAccept={onAccept}/>
+                        <ModalBodyComponent type={type} initialValues={initialValues} onClose={onClose} onAccept={onAccept} />
                     </>
                 )}
             </ModalContent>
