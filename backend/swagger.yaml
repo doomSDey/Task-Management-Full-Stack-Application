@@ -3,8 +3,6 @@ info:
     title: Task Tracker Backend
     version: 1.0.0
     description: APIs for facilitating CRUD operation for Task Tracker App
-servers:
-    - url: http://localhost:${process.env.PORT}
 components:
     securitySchemes:
         bearerAuth:

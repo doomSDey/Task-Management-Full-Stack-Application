@@ -10,15 +10,15 @@ export function middleware(request: NextRequest) {
         return NextResponse.next();
     }
 
-    // If there is no token and not on the login page, redirect to the login page
-    if (!token && !pathname.startsWith('/login')) {
-        return NextResponse.redirect(`${origin}/login`);
-    }
+    // // If there is no token and not on the login page, redirect to the login page
+    // if (!token && !pathname.startsWith('/login')) {
+    //     return NextResponse.redirect(`${origin}/login`);
+    // }
 
-    // If the user is authenticated and the request is for the login page, redirect to dashboard
-    if (token && pathname.startsWith('/login')) {
-        return NextResponse.redirect(`${origin}/home`);
-    }
+    // // If the user is authenticated and the request is for the login page, redirect to dashboard
+    // if (token && pathname.startsWith('/login')) {
+    //     return NextResponse.redirect(`${origin}/home`);
+    // }
 
     // Continue with the response if none of the above conditions apply
     return NextResponse.next();
