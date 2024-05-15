@@ -13,7 +13,7 @@ module.exports = {
     },
     test: {
         username: 'postgres',
-        password: admin,
+        password: 'admin',
         database: 'task_tracker_backend',
         host: '127.0.0.1',
         dialect: 'postgres',
