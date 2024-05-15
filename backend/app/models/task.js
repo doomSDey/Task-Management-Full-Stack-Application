@@ -32,6 +32,14 @@ const { Model } = require('sequelize');
  *           type: string
  *           format: date
  *           description: The due date of the task
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *           description: The auto-generated date the user was created
+ *         updatedAt:
+ *           type: string
+ *           format: date-time
+ *           description: The auto-generated date the user was last updated
  *       example:
  *         id: 1
  *         title: Sample Task
@@ -39,6 +47,8 @@ const { Model } = require('sequelize');
  *         status: To Do
  *         color: "#FF5733"
  *         dueDate: "2024-12-31"
+ *         createdAt: 2023-01-01T00:00:00Z
+ *         updatedAt: 2023-01-01T00:00:00Z
  */
 
 module.exports = (sequelize, DataTypes) => {
