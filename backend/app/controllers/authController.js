@@ -4,7 +4,7 @@ const User = database.User;
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
-exports.signUp = (request, response) => {
+exports.signUp = async (request, response) => {
     // Validate required fields
     const { username, email, password, avatarId } = request.body;
     if (!username || !email || !password || !avatarId) {
@@ -13,49 +13,71 @@ exports.signUp = (request, response) => {
         });
     }
 
-    return User.create({
-        username,
-        email,
-        password: bcrypt.hashSync(password, 8),
-        avatarId,
-    })
-        .then((newUser) => response.status(201).send(newUser))
-        .catch((error) =>
-            response.status(500).send({ message: error.message })
-        );
+    try {
+        const newUser = await User.create({
+            username,
+            email,
+            password: bcrypt.hashSync(password, 8),
+            avatarId,
+        });
+
+        const token = jwt.sign({ id: newUser.id }, config.secret, {
+            expiresIn: 86400, // 24 hours
+        });
+
+        response.status(201).send({
+            user: {
+                id: newUser.id,
+                username: newUser.username,
+                email: newUser.email,
+                avatarId: newUser.avatarId,
+                createdAt: newUser.createdAt,
+                updatedAt: newUser.updatedAt,
+            },
+            accessToken: token,
+        });
+    } catch (error) {
+        response.status(500).send({ message: error.message });
+    }
 };
 
-exports.signIn = (request, response) => {
-    console.log('here');
+exports.signIn = async (request, response) => {
     const signInError = {
         accessToken: null,
         message: 'Invalid email or password',
     };
 
-    return User.findOne({ where: { email: request.body.email } })
-        .then((user) => {
-            if (!user) return response.status(401).send(signInError);
+    try {
+        const user = await User.findOne({
+            where: { email: request.body.email },
+        });
 
-            const validPassword = bcrypt.compareSync(
-                request.body.password,
-                user.password
-            );
+        if (!user) return response.status(401).send(signInError);
 
-            if (!validPassword) return response.status(401).send(signInError);
+        const validPassword = bcrypt.compareSync(
+            request.body.password,
+            user.password
+        );
 
-            const token = jwt.sign({ id: user.id }, config.secret, {
-                expiresIn: 86400, // 24 hours
-            });
+        if (!validPassword) return response.status(401).send(signInError);
 
-            response.status(200).send({
+        const token = jwt.sign({ id: user.id }, config.secret, {
+            expiresIn: 86400, // 24 hours
+        });
+
+        response.status(200).send({
+            user: {
                 id: user.id,
                 username: user.username,
                 email: user.email,
                 avatarId: user.avatarId,
-                accessToken: token,
-            });
-        })
-        .catch((error) =>
-            response.status(500).send({ message: error.message })
-        );
+                createdAt: user.createdAt,
+                updatedAt: user.updatedAt,
+            },
+            accessToken: token,
+        });
+    } catch (error) {
+        console.log(error);
+        response.status(500).send({ message: error.message });
+    }
 };
