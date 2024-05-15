@@ -258,6 +258,86 @@ paths:
                                 properties:
                                     message:
                                         type: string
+    /tasks:
+        get:
+            summary: Get all tasks for the given user with filters and pagination
+            tags: [Tasks]
+            parameters:
+                - in: query
+                  name: startDate
+                  schema:
+                      type: string
+                      format: date-time
+                  description: Filter tasks with created date from this date
+                - in: query
+                  name: endDate
+                  schema:
+                      type: string
+                      format: date-time
+                  description: Filter tasks with created date up to this date
+                - in: query
+                  name: orderBy
+                  schema:
+                      type: string
+                      enum: [createdAt, title]
+                  description: Order by created date or title
+                - in: query
+                  name: order
+                  schema:
+                      type: string
+                      enum: [asc, desc]
+                  description: Order direction, either ascending or descending
+                - in: query
+                  name: page
+                  schema:
+                      type: integer
+                      default: 1
+                  description: Page number for pagination
+                - in: query
+                  name: limit
+                  schema:
+                      type: integer
+                      default: 10
+                  description: Number of tasks per page for pagination
+            responses:
+                '200':
+                    description: A list of tasks
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    totalItems:
+                                        type: integer
+                                        description: Total number of tasks
+                                    totalPages:
+                                        type: integer
+                                        description: Total number of pages
+                                    currentPage:
+                                        type: integer
+                                        description: Current page number
+                                    tasks:
+                                        type: array
+                                        items:
+                                            $ref: '#/components/schemas/Task'
+                '400':
+                    description: Bad request
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                '500':
+                    description: Internal server error
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
     /tasks/{taskId}:
         get:
             summary: Get a task by ID
@@ -334,7 +414,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/TaskResponse'
+                                $ref: '#/components/schemas/Task'
                 '400':
                     description: Bad request
                     content:

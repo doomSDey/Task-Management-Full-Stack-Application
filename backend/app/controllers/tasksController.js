@@ -1,4 +1,5 @@
 const Task = require('../models').Task;
+const { Op } = require('sequelize');
 
 exports.show = (request, response) => {
     const userId = request.userId;
@@ -20,6 +21,55 @@ exports.show = (request, response) => {
             console.log(error);
             response.status(400).send('Some error occurred');
         });
+};
+
+exports.getAllTasks = async (request, response) => {
+    const userId = request.userId; // Get the authenticated user ID
+    const {
+        startDate,
+        endDate,
+        orderBy = 'createdAt',
+        order = 'asc',
+        page = 1,
+        limit = 10,
+    } = request.query;
+    console.log('userId12s',userId)
+    const offset = (page - 1) * limit;
+    let whereClause = { userId };
+    if (startDate && endDate) {
+        whereClause.createdAt = {
+            [Op.between]: [new Date(startDate), new Date(endDate)],
+        };
+    } else if (startDate) {
+        whereClause.createdAt = {
+            [Op.gte]: new Date(startDate),
+        };
+    } else if (endDate) {
+        whereClause.createdAt = {
+            [Op.lte]: new Date(endDate),
+        };
+    }
+
+    try {
+        const tasks = await Task.findAndCountAll({
+            where: whereClause,
+            order: [[orderBy, order]],
+            offset: offset,
+            limit: parseInt(limit),
+        });
+
+        const totalPages = Math.ceil(tasks.count / limit);
+
+        return response.status(200).send({
+            totalItems: tasks.count,
+            totalPages: totalPages,
+            currentPage: page,
+            tasks: tasks.rows,
+        });
+    } catch (error) {
+        console.log(error);
+        return response.status(500).send({ message: 'Some error occurred' });
+    }
 };
 
 exports.create = async (request, response) => {
