@@ -1,6 +1,5 @@
 const swaggerJsdoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
-const cors = require('cors');
 
 const options = {
     definition: {
@@ -13,11 +12,11 @@ const options = {
         },
         servers: [
             {
-                url: cors({ origin: `http://localhost:${process.env.PORT}` }),
+                url: `http://localhost:${process.env.PORT}`,
             },
         ],
     },
-    apis: ['../routes/*.js', '../models/*.js'],
+    apis: ['./app/routes/*.js', './app/models/*.js'],
 };
 
 const specs = swaggerJsdoc(options);
