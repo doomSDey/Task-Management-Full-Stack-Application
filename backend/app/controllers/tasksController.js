@@ -13,18 +13,28 @@ exports.show = (request, response) => {
 };
 
 exports.create = async (request, response) => {
-    return await Task.create(
-        {
-            title: request.body.title,
-            description: request.body.description,
-            status: request.body.status,
-            dueData: request.body.dueDate,
-            userId: request.userId,
-        },
-        {}
-    ).then((newTask) =>
-        Task.findByPk(newTask.id, {})
-            .then((newTask) => response.status(201).send(newTask))
-            .catch((error) => response.status(400).send(error))
-    );
+    const { title, description, status, dueDate, color, userId } = request.body;
+
+    // Validate required fields
+    if (!title || !description || !status || !userId || !color) {
+        return response.status(400).send({
+            message:
+                'Title, description, status, and userId are required fields.',
+        });
+    }
+
+    try {
+        const newTask = await Task.create({
+            title,
+            description,
+            status,
+            dueDate,
+            color,
+            userId,
+        });
+
+        return response.status(201).send(newTask);
+    } catch (error) {
+        return response.status(400).send(error);
+    }
 };
