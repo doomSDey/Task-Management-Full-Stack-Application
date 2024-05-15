@@ -1,7 +1,14 @@
 const Task = require('../models').Task;
 
 exports.show = (request, response) => {
-    return Task.findByPk(request.params.taskId, {})
+    const userId = request.userId;
+
+    return Task.findOne({
+        where: {
+            id: request.params.taskId,
+            userId: userId,
+        },
+    })
         .then((task) => {
             if (!task) {
                 response.status(404).send({ error: 'Task not found' });
@@ -16,13 +23,14 @@ exports.show = (request, response) => {
 };
 
 exports.create = async (request, response) => {
-    const { title, description, status, dueDate, color, userId } = request.body;
+    const { title, description, status, dueDate, color } = request.body;
+    const userId = request.userId; // Get the authenticated user ID
 
     // Validate required fields
-    if (!title || !description || !status || !userId || !color) {
+    if (!title || !description || !status || !color) {
         return response.status(400).send({
             message:
-                'Title, description, status, and userId are required fields.',
+                'Title, description, status, and color are required fields.',
         });
     }
 

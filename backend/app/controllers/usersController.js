@@ -11,7 +11,14 @@ const userSerializationOptions = {
 };
 
 exports.show = (request, response) => {
-    return User.findByPk(request.params.userId, userSerializationOptions)
+    const userId = request.userId; // Get the authenticated user ID
+    console.log('userId', userId);
+    // Check if the authenticated user is requesting their own data
+    if (userId.toString() !== request.params.userId) {
+        return response.status(403).send({ error: 'Forbidden' });
+    }
+
+    return User.findByPk(userId)
         .then((user) => {
             if (!user) {
                 response.status(404).send({ error: 'User not found' });
@@ -20,7 +27,7 @@ exports.show = (request, response) => {
             }
         })
         .catch((error) => {
-            console.log(error, 'error')
-            response.status(400).send('Some error occurred')
+            console.log(error);
+            response.status(400).send('Some error occurred');
         });
 };
