@@ -50,3 +50,29 @@ exports.create = async (request, response) => {
         return response.status(400).send('Some error occurred');
     }
 };
+
+exports.delete = async (request, response) => {
+    const userId = request.userId; // Get the authenticated user ID
+    const { taskId } = request.params;
+    console.log('test', taskId, userId)
+    try {
+        const task = await Task.findOne({
+            where: {
+                id: parseInt(taskId),
+                userId: userId,
+            },
+        });
+
+        if (!task) {
+            return response.status(404).send({ error: 'Task not found' });
+        }
+
+        await task.destroy();
+        return response
+            .status(200)
+            .send({ message: 'Task deleted successfully' });
+    } catch (error) {
+        console.log(error);
+        return response.status(500).send({ message: 'Some error occurred' });
+    }
+};
