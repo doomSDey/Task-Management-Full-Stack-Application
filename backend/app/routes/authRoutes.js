@@ -1,6 +1,3 @@
-const { verifySignUp } = require('../middleware');
-const authController = require('../controllers').auth;
-
 /**
  * @swagger
  * tags:
@@ -125,21 +122,16 @@ const authController = require('../controllers').auth;
  *                   type: string
  */
 
-module.exports = (app) => {
-    // Auth headers //
-    app.use((request, response, next) => {
-        response.header(
-            'Access-Control-Allow-Headers',
-            'x-access-token, Origin, Content-Type, Accept'
-        );
-        next();
-    });
-    // Auth routes //
+const { verifySignUp } = require('../middleware');
+const authController = require('../controllers').auth;
+const router = require('express').Router();
 
-    app.post(
-        '/signup',
-        [verifySignUp.checkForDuplicateEmail],
-        authController.signUp
-    );
-    app.post('/signin', authController.signIn);
-};
+router.post(
+    '/signup',
+    [verifySignUp.checkForDuplicateEmail],
+    authController.signUp
+);
+
+router.post('/signin', authController.signIn);
+
+module.exports = router;
