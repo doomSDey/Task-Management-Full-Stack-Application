@@ -1,11 +1,11 @@
 require('dotenv').config();
+const { swaggerUi, specs } = require('./app/config/swagger.js');
 const express = require('express');
-const cors = require('cors');
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors({ origin: `http://localhost:${process.env.PORT}` }));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 require('./app/routes/index.js')(app);
 
