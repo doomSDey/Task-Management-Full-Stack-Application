@@ -10,4 +10,4 @@ const checkForDuplicateEmail = (request, response, next) => {
     });
 };
 
-module.exports = { checkForDuplicateEmail: checkForDuplicateEmail };
+module.exports = checkForDuplicateEmail;

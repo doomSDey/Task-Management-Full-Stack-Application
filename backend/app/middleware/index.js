@@ -1,4 +1,4 @@
 const authorizeJwt = require('./authorizeJwt');
-const verifySignUp = require('./checkForDuplicateEmail');
+const checkForDuplicateEmail = require('./checkForDuplicateEmail');
 
-module.exports = { authorizeJwt, verifySignUp };
+module.exports = { authorizeJwt, checkForDuplicateEmail };
