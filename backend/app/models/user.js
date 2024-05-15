@@ -29,10 +29,15 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.STRING,
                 allowNull: false, // Password must not be null
             },
+            avatarId: {
+                type: DataTypes.STRING,
+                allowNull: false, // Avatar will not be null
+            },
         },
         {
             sequelize,
             modelName: 'User',
+            timestamps: true,
         }
     );
     return User;

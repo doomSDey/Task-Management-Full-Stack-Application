@@ -27,14 +27,19 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: false, // Description must not be null
             },
             status: {
-                type: DataTypes.ENUM('All', 'To Do', 'In Progress', 'Done'),
+                type: DataTypes.ENUM('To Do', 'In Progress', 'Done'),
                 allowNull: false, // Status must not be null
+            },
+            color: {
+                type: DataTypes.STRING, // Hex code for color
+                allowNull: true, // Color can be null
             },
             dueData: DataTypes.DATE, // Optional DATE field for dueData
         },
         {
             sequelize,
             modelName: 'Task',
+            timestamps: true,
         }
     );
     return Task;
