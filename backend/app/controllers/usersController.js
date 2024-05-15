@@ -19,5 +19,8 @@ exports.show = (request, response) => {
                 response.status(200).send(user);
             }
         })
-        .catch((error) => response.status(400).send(error));
+        .catch((error) => {
+            console.log(error, 'error')
+            response.status(400).send('Some error occurred')
+        });
 };

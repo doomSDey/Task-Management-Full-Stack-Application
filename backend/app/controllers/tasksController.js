@@ -9,7 +9,10 @@ exports.show = (request, response) => {
                 response.status(200).send(task);
             }
         })
-        .catch((error) => response.status(400).send(error));
+        .catch((error) => {
+            console.log(error);
+            response.status(400).send('Some error occurred');
+        });
 };
 
 exports.create = async (request, response) => {
@@ -35,6 +38,7 @@ exports.create = async (request, response) => {
 
         return response.status(201).send(newTask);
     } catch (error) {
-        return response.status(400).send(error);
+        console.log('error', error);
+        return response.status(400).send('Some error occurred');
     }
 };

@@ -37,7 +37,7 @@ exports.signUp = async (request, response) => {
             accessToken: token,
         });
     } catch (error) {
-        response.status(500).send({ message: error.message });
+        return response.status(400).send('Some error occurred');
     }
 };
 
@@ -78,6 +78,6 @@ exports.signIn = async (request, response) => {
         });
     } catch (error) {
         console.log(error);
-        response.status(500).send({ message: error.message });
+        return response.status(400).send('Some error occurred');
     }
 };
