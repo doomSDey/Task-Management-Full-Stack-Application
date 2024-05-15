@@ -84,7 +84,7 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.STRING, // Hex code for color
                 allowNull: false, // Color can be null
             },
-            dueData: DataTypes.DATE, // Optional DATE field for dueData
+            dueDate: DataTypes.DATE, // Optional DATE field for dueDate
         },
         {
             sequelize,
