@@ -1,56 +1,6 @@
 'use strict';
 const { Model } = require('sequelize');
 
-/**
- * @swagger
- * components:
- *   schemas:
- *     Task:
- *       type: object
- *       required:
- *         - title
- *         - description
- *         - status
- *         - color
- *       properties:
- *         id:
- *           type: integer
- *           description: The auto-generated id of the task
- *         title:
- *           type: string
- *           description: The title of the task
- *         description:
- *           type: string
- *           description: The description of the task
- *         status:
- *           type: string
- *           description: The status of the task
- *         color:
- *           type: string
- *           description: The color of the task
- *         dueDate:
- *           type: string
- *           format: date
- *           description: The due date of the task
- *         createdAt:
- *           type: string
- *           format: date-time
- *           description: The auto-generated date the user was created
- *         updatedAt:
- *           type: string
- *           format: date-time
- *           description: The auto-generated date the user was last updated
- *       example:
- *         id: 1
- *         title: Sample Task
- *         description: This is a sample task
- *         status: To Do
- *         color: "#FF5733"
- *         dueDate: "2024-12-31"
- *         createdAt: 2023-01-01T00:00:00Z
- *         updatedAt: 2023-01-01T00:00:00Z
- */
-
 module.exports = (sequelize, DataTypes) => {
     class Task extends Model {
         /**

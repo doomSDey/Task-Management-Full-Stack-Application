@@ -1,0 +1,342 @@
+openapi: 3.0.0
+info:
+    title: Task Tracker Backend
+    version: 1.0.0
+    description: APIs for facilitating CRUD operation for Task Tracker App
+servers:
+    - url: http://localhost:${process.env.PORT}
+components:
+    securitySchemes:
+        bearerAuth:
+            type: http
+            scheme: bearer
+            bearerFormat: JWT
+    schemas:
+        User:
+            type: object
+            required:
+                - username
+                - email
+                - password
+                - avatarId
+            properties:
+                id:
+                    type: string
+                    description: The auto-generated unique ID of the user
+                username:
+                    type: string
+                    description: The username of the user
+                email:
+                    type: string
+                    description: The email address of the user
+                password:
+                    type: string
+                    description: The hashed password of the user
+                avatarId:
+                    type: string
+                    description: The avatar ID of the user
+                createdAt:
+                    type: string
+                    format: date-time
+                    description: The date and time when the user was created
+                updatedAt:
+                    type: string
+                    format: date-time
+                    description: The date and time when the user was last updated
+        Task:
+            type: object
+            required:
+                - title
+                - description
+                - status
+                - dueDate
+                - color
+                - userId
+            properties:
+                id:
+                    type: string
+                    description: The auto-generated unique ID of the task
+                title:
+                    type: string
+                    description: The title of the task
+                description:
+                    type: string
+                    description: The description of the task
+                status:
+                    type: string
+                    description: The status of the task
+                dueDate:
+                    type: string
+                    format: date-time
+                    description: The due date of the task
+                color:
+                    type: string
+                    description: The color associated with the task
+                userId:
+                    type: string
+                    description: The ID of the user who created the task
+                createdAt:
+                    type: string
+                    format: date-time
+                    description: The date and time when the task was created
+                updatedAt:
+                    type: string
+                    format: date-time
+                    description: The date and time when the task was last updated
+security:
+    - bearerAuth: []
+tags:
+    - name: Auth
+      description: Authorization management
+    - name: Tasks
+      description: Task management
+    - name: Users
+      description: User management
+paths:
+    /auth/signup:
+        post:
+            summary: Sign up a new user
+            tags:
+                - Auth
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required:
+                                - username
+                                - email
+                                - password
+                                - avatarId
+                            properties:
+                                username:
+                                    type: string
+                                email:
+                                    type: string
+                                password:
+                                    type: string
+                                avatarId:
+                                    type: string
+                            example:
+                                username: johndoe
+                                email: johndoe@example.com
+                                password: secret123
+                                avatarId: avatar123
+            responses:
+                '201':
+                    description: The user was successfully created
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    user:
+                                        $ref: '#/components/schemas/User'
+                                    accessToken:
+                                        type: string
+                '400':
+                    description: Bad request
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                '500':
+                    description: Internal server error
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+    /auth/signin:
+        post:
+            summary: Sign in a user
+            tags:
+                - Auth
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            required:
+                                - email
+                                - password
+                            properties:
+                                email:
+                                    type: string
+                                password:
+                                    type: string
+                            example:
+                                email: john@example.com
+                                password: secret123
+            responses:
+                '200':
+                    description: The user was successfully signed in
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    user:
+                                        $ref: '#/components/schemas/User'
+                                    accessToken:
+                                        type: string
+                '401':
+                    description: Invalid username or password
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                '500':
+                    description: Internal server error
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+    /tasks:
+        post:
+            summary: Create a new task
+            tags: [Tasks]
+            requestBody:
+                required: true
+                content:
+                  application/json:
+                    schema:
+                        type: object
+                        required:
+                            - title
+                            - description
+                            - status
+                            - dueDate
+                            - color
+                            - userId
+                        properties:
+                            title:
+                                type: string
+                            description:
+                                type: string
+                            status:
+                                type: string
+                            dueDate:
+                                type: string
+                                format: date-time
+                            color:
+                                type: string
+                            userId:
+                                type: string
+                        example:
+                            title: New Task
+                            description: This is a new task
+                            status: Pending
+                            dueDate: 2024-05-15T10:00:00.000Z
+                            color: '#ff0000'
+                            userId: user123
+            responses:
+                '201':
+                    description: The task was successfully created
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Task'
+                '400':
+                    description: Bad request
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                '500':
+                    description: Internal server error
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+    /tasks/{taskId}:
+        get:
+            summary: Get a task by ID
+            tags: [Tasks]
+            parameters:
+                - in: path
+                  name: taskId
+                  schema:
+                      type: string
+                  required: true
+                  description: The task ID
+            responses:
+                '200':
+                    description: The task description by ID
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Task'
+                '404':
+                    description: Task not found
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                '500':
+                    description: Internal server error
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+    /users/{userId}:
+        get:
+            summary: Get a user by ID
+            tags: [Users]
+            parameters:
+                - in: path
+                  name: userId
+                  schema:
+                      type: string
+                  required: true
+                  description: The user ID
+            responses:
+                '200':
+                    description: The user description by ID
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/User'
+                '404':
+                    description: User not found
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                '500':
+                    description: Internal server error
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
