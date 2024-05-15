@@ -46,7 +46,6 @@ components:
                 - status
                 - dueDate
                 - color
-                - userId
             properties:
                 id:
                     type: string
@@ -200,7 +199,7 @@ paths:
                                 properties:
                                     message:
                                         type: string
-    /tasks:
+    /tasks/newTask:
         post:
             summary: Create a new task
             tags: [Tasks]
@@ -216,7 +215,6 @@ paths:
                             - status
                             - dueDate
                             - color
-                            - userId
                         properties:
                             title:
                                 type: string
@@ -229,15 +227,12 @@ paths:
                                 format: date-time
                             color:
                                 type: string
-                            userId:
-                                type: string
                         example:
                             title: New Task
                             description: This is a new task
-                            status: Pending
+                            status: In Progress
                             dueDate: 2024-05-15T10:00:00.000Z
                             color: '#ff0000'
-                            userId: user123
             responses:
                 '201':
                     description: The task was successfully created
