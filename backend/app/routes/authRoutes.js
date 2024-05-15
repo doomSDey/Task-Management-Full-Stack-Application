@@ -13,7 +13,7 @@ module.exports = (app) => {
     // Auth routes //
     app.post(
         '/signup',
-        [verifySignUp.checkForDuplicateUsername],
+        [verifySignUp.checkForDuplicateEmail],
         authController.signUp
     );
     app.post('/signin', authController.signIn);
