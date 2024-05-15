@@ -14,7 +14,7 @@ export interface CardData {
     description: string;
     status: string;
     color: string;
-    dueData?: string;
+    dueDate?: string;
 }
 
 export interface FilterValues {
