@@ -1,9 +1,9 @@
 const listenForAuthRoutes = require('../routes/authRoutes');
-const listenForNoteRoutes = require('./noteRoutes');
+const listenForTaskRoutes = require('./taskRoutes');
 const listenForUserRoutes = require('../routes/userRoutes');
 
 module.exports = (app) => {
     listenForAuthRoutes(app);
-    listenForNoteRoutes(app);
+    listenForTaskRoutes(app);
     listenForUserRoutes(app);
 };

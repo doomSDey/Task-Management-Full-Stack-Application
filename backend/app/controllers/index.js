@@ -1,9 +1,9 @@
 const auth = require('./authController.js');
 const users = require('./usersController.js');
-const notes = require('./notesController.js');
+const tasks = require('./tasksController.js');
 
 module.exports = {
     auth,
-    notes,
+    tasks,
     users,
 };

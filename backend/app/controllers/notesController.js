@@ -1,19 +1,19 @@
-const Note = require('../models').Note;
+const Task = require('../models').Task;
 
 exports.show = (request, response) => {
-    return Note.findByPk(request.params.noteId, {})
-        .then((note) => {
-            if (!note) {
-                response.status(404).send({ error: 'Note not found' });
+    return Task.findByPk(request.params.taskId, {})
+        .then((task) => {
+            if (!task) {
+                response.status(404).send({ error: 'Task not found' });
             } else {
-                response.status(200).send(note);
+                response.status(200).send(task);
             }
         })
         .catch((error) => response.status(400).send(error));
 };
 
 exports.create = async (request, response) => {
-    return await Note.create(
+    return await Task.create(
         {
             title: request.body.title,
             description: request.body.description,
@@ -22,9 +22,9 @@ exports.create = async (request, response) => {
             userId: request.userId,
         },
         {}
-    ).then((newNote) =>
-        Note.findByPk(newNote.id, {})
-            .then((newNote) => response.status(201).send(newNote))
+    ).then((newTask) =>
+        Task.findByPk(newTask.id, {})
+            .then((newTask) => response.status(201).send(newTask))
             .catch((error) => response.status(400).send(error))
     );
 };

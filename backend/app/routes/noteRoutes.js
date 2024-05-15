@@ -1,7 +1,7 @@
 const { authorizeJwt } = require('../middleware');
-const notesController = require('../controllers').notes;
+const tasksController = require('../controllers').tasks;
 
 module.exports = (app) => {
-    app.get('/notes/:noteId', notesController.show);
-    app.post('/notes', [authorizeJwt.verifyToken], notesController.create);
+    app.get('/tasks/:taskId', tasksController.show);
+    app.post('/tasks', [authorizeJwt.verifyToken], tasksController.create);
 };

@@ -1,5 +1,5 @@
 {
-    "name": "note_maker_backend",
+    "name": "task_tracker_backend",
     "version": "1.0.0",
     "main": "index.js",
     "license": "MIT",

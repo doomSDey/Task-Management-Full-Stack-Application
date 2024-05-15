@@ -1,11 +1,11 @@
 const User = require('../models').User;
-const Note = require('../models').Note;
+const Task = require('../models').Task;
 
 const userSerializationOptions = {
     include: [
         {
-            model: Note,
-            as: 'notes',
+            model: Task,
+            as: 'tasks',
         },
     ],
 };
