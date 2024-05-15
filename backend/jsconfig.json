@@ -1,0 +1,18 @@
+{
+    "compilerOptions": {
+        "target": "ES6",
+        "module": "commonjs",
+        "baseUrl": "./",
+        "paths": {
+            "@root/*": ["./*"],
+            "@src/*": ["app/*"],
+            "@controllers/*": ["app/controllers/*"],
+            "@models/*": ["app/models/*"],
+            "@routes/*": ["app/routes/*"],
+            "@utils/*": ["app/utils/*"],
+            "@middlewares/*": ["app/middlewares/*"]
+        }
+    },
+    "include": ["app/**/*.js"],
+    "exclude": ["node_modules"]
+}
