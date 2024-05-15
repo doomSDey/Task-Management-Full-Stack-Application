@@ -22,5 +22,7 @@ export enum ModalTypes {
     Filter,
     CreateTask,
     EditTask,
-    ViewTask
+    ViewTask,
+    DeleteCard,
+    DeleteCards
 }

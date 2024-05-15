@@ -3,12 +3,12 @@ import { Button, Checkbox, DatePicker, Input, Radio, RadioGroup, Select, SelectI
 import { Field, FieldProps, Form, Formik } from "formik";
 
 import { ModalTypes, TaskCardBackgroundColors, TaskStatus } from "../helpers/enums"
-import { CardData, FilterValues } from "../pages/home";
+import { CardData, DeleteCards, FilterValues } from "../pages/home";
 
 interface ModalComponentProps {
-    initialValues?: FilterValues | Partial<CardData>,
+    initialValues?: FilterValues | Partial<CardData> | DeleteCards,
     type: ModalTypes,
-    onAccept: (arg0: FilterValues | Partial<CardData>) => void,
+    onAccept: (arg0: FilterValues | Partial<CardData> | DeleteCards) => void,
     onDecline: () => void,
     isOpen: boolean,
     onOpenChange: () => void,
@@ -16,12 +16,17 @@ interface ModalComponentProps {
 
 interface ModalBodyComponentProps {
     type: ModalTypes,
-    initialValues?: FilterValues | Partial<CardData>,
+    initialValues?: FilterValues | Partial<CardData> | DeleteCards,
     onClose: () => void,
-    onAccept: (arg0: FilterValues | Partial<CardData>) => void,
+    onAccept: (arg0: FilterValues | Partial<CardData> | DeleteCards) => void,
 }
 
-const ModalHeaderComponent: React.FC<Partial<ModalComponentProps>> = ({ type }) => {
+function isDeleteCards(values: FilterValues | Partial<CardData> | DeleteCards | undefined): values is DeleteCards {
+    console.log('asdas', (values as DeleteCards).taskIds !== undefined)
+    return (values as DeleteCards).taskIds !== undefined;
+}
+
+const ModalHeaderComponent: React.FC<Partial<ModalComponentProps>> = ({ type, initialValues }) => {
     switch (type) {
         case ModalTypes.Filter:
             return (
@@ -38,6 +43,18 @@ const ModalHeaderComponent: React.FC<Partial<ModalComponentProps>> = ({ type }) 
         case ModalTypes.ViewTask:
             return (
                 <ModalHeader className="flex flex-col gap-1">View Task</ModalHeader>
+            );
+        case ModalTypes.DeleteCard:
+            return (
+                <ModalHeader className="flex flex-col gap-1">
+                    {isDeleteCards(initialValues) && `Are you sure you want to delete ${initialValues.taskTitle && initialValues.taskTitle} task?`}
+                </ModalHeader>
+            );
+        case ModalTypes.DeleteCards:
+            return (
+                <ModalHeader className="flex flex-col gap-1">
+                    {isDeleteCards(initialValues) && `Are you sure you want to delete ${initialValues.taskIds.length} tasks?`}
+                </ModalHeader>
             );
         default:
             return null;
@@ -236,6 +253,25 @@ const ModalBodyComponent: React.FC<ModalBodyComponentProps> = ({ type, initialVa
                     )}
                 </Formik>
             );
+        case ModalTypes.DeleteCard:
+        case ModalTypes.DeleteCards:
+            return (
+                <>
+                    <ModalBody>
+                        <p>Are you sure?</p>
+                    </ModalBody >
+                    <ModalFooter>
+                        <Button variant="flat" type="button" onPress={() => {
+                            onClose()
+                        }}>
+                            Cancel
+                        </Button>
+                        <Button onPress={() => onAccept(initialValues!)}>
+                            Accept
+                        </Button>
+                    </ModalFooter>
+                </>
+            )
         default:
             return null;
     }
@@ -247,7 +283,7 @@ const ModalComponenet: React.FC<ModalComponentProps> = ({ type, isOpen, onOpenCh
             <ModalContent>
                 {(onClose) => (
                     <>
-                        <ModalHeaderComponent type={type} />
+                        <ModalHeaderComponent type={type} initialValues={initialValues} />
                         <ModalBodyComponent type={type} initialValues={initialValues} onClose={onClose} onAccept={onAccept} />
                     </>
                 )}
