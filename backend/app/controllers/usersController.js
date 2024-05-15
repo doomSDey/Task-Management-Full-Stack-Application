@@ -23,7 +23,14 @@ exports.show = (request, response) => {
             if (!user) {
                 response.status(404).send({ error: 'User not found' });
             } else {
-                response.status(200).send(user);
+                response.status(200).send({
+                    id: user.id,
+                    username: user.username,
+                    email: user.email,
+                    avatarId: user.avatarId,
+                    createdAt: user.createdAt,
+                    updatedAt: user.updatedAt,
+                });
             }
         })
         .catch((error) => {
