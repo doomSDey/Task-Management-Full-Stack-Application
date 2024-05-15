@@ -294,6 +294,74 @@ paths:
                                 properties:
                                     message:
                                         type: string
+        put:
+            summary: Update a task
+            tags: [Tasks]
+            parameters:
+                - in: path
+                  name: taskId
+                  schema:
+                      type: string
+                  required: true
+                  description: The task ID
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                title:
+                                    type: string
+                                description:
+                                    type: string
+                                status:
+                                    type: string
+                                dueDate:
+                                    type: string
+                                    format: date-time
+                                color:
+                                    type: string
+                            example:
+                                title: Updated Task Title
+                                description: Updated task description
+                                status: In Progress
+                                dueDate: 2024-05-20T10:00:00.000Z
+                                color: '#00ff00'
+            responses:
+                '200':
+                    description: The task was successfully updated
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/TaskResponse'
+                '400':
+                    description: Bad request
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                '404':
+                    description: Task not found
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                '500':
+                    description: Internal server error
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
         delete:
             summary: Delete a task
             tags: [Tasks]

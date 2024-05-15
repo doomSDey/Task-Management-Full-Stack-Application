@@ -4,6 +4,7 @@ const router = require('express').Router();
 
 router.get('/:taskId', [authorizeJwt.verifyToken], tasksController.show);
 router.post('/newTask', [authorizeJwt.verifyToken], tasksController.create);
+router.put('/:taskId', [authorizeJwt.verifyToken], tasksController.update);
 router.delete('/:taskId', [authorizeJwt.verifyToken], tasksController.delete);
 
 module.exports = router;
