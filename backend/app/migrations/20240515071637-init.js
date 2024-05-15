@@ -61,7 +61,7 @@ module.exports = {
             },
             color: {
                 type: Sequelize.STRING,
-                allowNull: true,
+                allowNull: false,
             },
             dueDate: {
                 type: Sequelize.DATE,
