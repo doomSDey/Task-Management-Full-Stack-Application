@@ -11,11 +11,15 @@ export default function App({ Component, pageProps }: AppProps) {
     return (
         <AuthProvider>
             <NextUIProvider>
-                <div className="h-screen">
+                <div className="h-screen bg-background text-foreground mytheme">
                     <Component {...pageProps} />
                 </div>
             </NextUIProvider>
-            <ToastContainer autoClose={1200} draggable position='bottom-right'/>
+            <ToastContainer
+                autoClose={1200}
+                draggable
+                position="bottom-right"
+            />
         </AuthProvider>
     );
 }

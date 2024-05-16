@@ -1,11 +1,21 @@
-import { Avatar, Badge, Button, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger, Input } from "@nextui-org/react";
+import {
+    Avatar,
+    Badge,
+    Button,
+    Dropdown,
+    DropdownItem,
+    DropdownMenu,
+    DropdownSection,
+    DropdownTrigger,
+    Input,
+} from '@nextui-org/react';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
-import { useAuth } from "../context/AuthContext";
-import { Avatars } from "../helpers/commonData";
-import { TaskTabs } from "../helpers/enums";
-import { getTasksDueToday, Task } from "../service/tasks";
+import { useAuth } from '../context/AuthContext';
+import { Avatars } from '../helpers/commonData';
+import { TaskTabs } from '../helpers/enums';
+import { getTasksDueToday, Task } from '../service/tasks';
 
 interface TopbarProps {
     taskStatus: TaskTabs;
@@ -14,10 +24,16 @@ interface TopbarProps {
     onNotificationPress: (task: Task) => void;
 }
 
-const Topbar: React.FC<TopbarProps> = ({ taskStatus, searchKeyword, setSearchKeyword, onNotificationPress }) => {
+const Topbar: React.FC<TopbarProps> = ({
+    taskStatus,
+    searchKeyword,
+    setSearchKeyword,
+    onNotificationPress,
+}) => {
     const auth = useAuth();
     const [notificationList, setNotificationList] = useState<Task[]>([]);
-    const avatarId: keyof typeof Avatars = auth?.authData?.user.avatarId || 'Avatar1';
+    const avatarId: keyof typeof Avatars =
+        auth?.authData?.user.avatarId || 'Avatar1';
     const avatarUrl = `/static/${Avatars[avatarId]}`;
 
     useEffect(() => {
@@ -48,33 +64,49 @@ const Topbar: React.FC<TopbarProps> = ({ taskStatus, searchKeyword, setSearchKey
                     isBordered
                     as="button"
                     className="transition-transform"
+                    size="lg"
                     src={avatarUrl}
                 />
             </DropdownTrigger>
             <DropdownMenu aria-label="Profile Actions" variant="flat">
                 <DropdownItem key="profile" className="h-14 gap-2">
                     <p className="font-semibold">Signed in as</p>
-                    <p className="font-semibold">{auth?.authData?.user.username}</p>
-                    <p className="font-semibold">{auth?.authData?.user.email}</p>
+                    <p className="font-semibold">
+                        {auth?.authData?.user.username}
+                    </p>
+                    <p className="font-semibold">
+                        {auth?.authData?.user.email}
+                    </p>
                 </DropdownItem>
                 <DropdownSection title="Change avatar" showDivider>
                     <DropdownItem className="cursor-default" isReadOnly>
-                        <div className="grid grid-cols-3 gap-4 py-4">
+                        <div className="grid grid-cols-3 gap-4 px-2 py-4">
                             {Object.keys(Avatars).map((key) => (
-                                <div key={key} className="flex justify-center items-center">
+                                <div
+                                    key={key}
+                                    className="flex items-center justify-center"
+                                >
                                     <Avatar
                                         isBordered
                                         as="button"
                                         className="transition-transform"
                                         src={`/static/${Avatars[key as keyof typeof Avatars]}`}
-                                        onClick={() => handleAvatarChange(key as keyof typeof Avatars)}
+                                        onClick={() =>
+                                            handleAvatarChange(
+                                                key as keyof typeof Avatars
+                                            )
+                                        }
                                     />
                                 </div>
                             ))}
                         </div>
                     </DropdownItem>
                 </DropdownSection>
-                <DropdownItem key="logout" color="danger" onPress={auth?.signOut}>
+                <DropdownItem
+                    key="logout"
+                    color="danger"
+                    onPress={auth?.signOut}
+                >
                     Log Out
                 </DropdownItem>
             </DropdownMenu>
@@ -85,7 +117,13 @@ const Topbar: React.FC<TopbarProps> = ({ taskStatus, searchKeyword, setSearchKey
         <Dropdown placement="bottom-end">
             <Badge content={notificationList.length} color="primary">
                 <DropdownTrigger>
-                    <Button isIconOnly aria-label="Notification">
+                    <Button
+                        isIconOnly
+                        aria-label="Notification"
+                        size="lg"
+                        radius="full"
+                        variant="ghost"
+                    >
                         <i className="bi bi-bell"></i>
                     </Button>
                 </DropdownTrigger>
@@ -94,8 +132,17 @@ const Topbar: React.FC<TopbarProps> = ({ taskStatus, searchKeyword, setSearchKey
                 <DropdownItem className="cursor-default" isReadOnly>
                     {notificationList.map((notification, index) => (
                         <div key={index} className="w-full">
-                            <Button variant="ghost" className="w-full flex items-center justify-start space-x-2 border-none max-w-48" startContent={<i className="bi bi-bell"></i>} onPress={() => onNotificationPress(notification)}>
-                                <p className="text-ellipsis overflow-hidden whitespace-nowrap">{notification.title} is due today</p>
+                            <Button
+                                variant="ghost"
+                                className="flex w-full max-w-48 items-center justify-start space-x-2 border-none"
+                                startContent={<i className="bi bi-bell"></i>}
+                                onPress={() =>
+                                    onNotificationPress(notification)
+                                }
+                            >
+                                <p className="overflow-hidden text-ellipsis whitespace-nowrap">
+                                    {notification.title} is due today
+                                </p>
                             </Button>
                         </div>
                     ))}
@@ -105,42 +152,50 @@ const Topbar: React.FC<TopbarProps> = ({ taskStatus, searchKeyword, setSearchKey
     );
 
     return (
-        <div className="flex flex-col md:flex-row gap-4 py-4">
+        <div className="flex w-full flex-col justify-center gap-4 py-4 md:flex-row">
             {/* Logo, Profile, and Notification for small screens */}
-            <div className="flex md:hidden justify-between items-center w-full">
-                <ProfileComponent />
-                <Image className="mx-auto" src='/static/logo2.png' width={70} height={100} alt='logo' />
-                <NotificationComponent />
-            </div>
-            {/* Search bar for small screens */}
-            <div className="md:hidden w-full">
-                <Input
-                    type="text"
-                    placeholder={`Search in ${taskStatus}`}
-                    labelPlacement="outside"
-                    value={searchKeyword}
-                    onChange={(e) => setSearchKeyword(e.target.value)}
-                    className="w-full"
-                    endContent={
-                        <i className="bi bi-search"></i>
-                    }
-                />
-            </div>
-            {/* Search bar, Notification, and Profile for larger screens */}
-            <div className="hidden md:flex md:items-center w-full gap-4">
-                <Input
-                    type="text"
-                    placeholder={`Search in ${taskStatus}`}
-                    labelPlacement="outside"
-                    value={searchKeyword}
-                    onChange={(e) => setSearchKeyword(e.target.value)}
-                    className="flex-grow"
-                    endContent={
-                        <i className="bi bi-search"></i>
-                    }
-                />
-                <NotificationComponent />
-                <ProfileComponent />
+            <div className="w-full md:w-5/6">
+                <div className="flex w-full items-center justify-between md:hidden">
+                    <ProfileComponent />
+                    <Image
+                        className="mx-auto"
+                        src="/static/logo2.png"
+                        width={70}
+                        height={100}
+                        alt="logo"
+                    />
+                    <NotificationComponent />
+                </div>
+                {/* Search bar for small screens */}
+                <div className="w-full pb-2 pt-4 md:hidden">
+                    <Input
+                        type="text"
+                        placeholder={`Search in ${taskStatus}`}
+                        labelPlacement="outside"
+                        value={searchKeyword}
+                        radius="full"
+                        onChange={(e) => setSearchKeyword(e.target.value)}
+                        className="w-full"
+                        color="default"
+                        endContent={<i className="bi bi-search"></i>}
+                    />
+                </div>
+                {/* Search bar, Notification, and Profile for larger screens */}
+                <div className="hidden w-full gap-4 md:flex md:items-center">
+                    <Input
+                        type="text"
+                        size="lg"
+                        placeholder={`Search in ${taskStatus}`}
+                        labelPlacement="outside"
+                        radius="full"
+                        value={searchKeyword}
+                        onChange={(e) => setSearchKeyword(e.target.value)}
+                        className="flex-grow"
+                        endContent={<i className="bi bi-search"></i>}
+                    />
+                    <NotificationComponent />
+                    <ProfileComponent />
+                </div>
             </div>
         </div>
     );

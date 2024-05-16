@@ -1,25 +1,39 @@
-import { parseDate } from "@internationalized/date";
-import { Checkbox, CheckboxGroup, Divider, useDisclosure } from "@nextui-org/react";
-import { useEffect, useState } from "react";
+import { parseDate } from '@internationalized/date';
+import {
+    Checkbox,
+    CheckboxGroup,
+    Divider,
+    useDisclosure,
+} from '@nextui-org/react';
+import { useEffect, useState } from 'react';
 
-import ModalComponent from "../../components/ModalComponent";
-import Sidebar from "../../components/Sidebar";
-import TaskCard from "../../components/TaskCard";
-import TaskStatusTabs from "../../components/TaskStatusTabs";
-import Topbar from "../../components/Topbar";
-import { ModalTypes, TaskCardBackgroundColors, TaskTabs } from "../../helpers/enums";
-import useDebounce from "../../hooks/useDebounce";
-import { fetchTasks, FetchTasksParams, FetchTasksResponse, Task } from "../../service/tasks";
+import ModalComponent from '../../components/ModalComponent';
+import Sidebar from '../../components/Sidebar';
+import TaskCard from '../../components/TaskCard';
+import TaskStatusTabs from '../../components/TaskStatusTabs';
+import Topbar from '../../components/Topbar';
+import {
+    ModalTypes,
+    TaskCardBackgroundColors,
+    TaskTabs,
+} from '../../helpers/enums';
+import useDebounce from '../../hooks/useDebounce';
+import {
+    fetchTasks,
+    FetchTasksParams,
+    FetchTasksResponse,
+    Task,
+} from '../../service/tasks';
 
 export interface DeleteCards {
-    taskIds: string[],
-    taskTitle?: string
+    taskIds: string[];
+    taskTitle?: string;
 }
 export interface FilterValues {
-    startDate: string | null,
-    endDate: string | null,
-    sortOption: string | null,
-    sortOrder: string | null
+    startDate: string | null;
+    endDate: string | null;
+    sortOption: string | null;
+    sortOrder: string | null;
 }
 
 function getRandomColor(): TaskCardBackgroundColors {
@@ -34,23 +48,27 @@ const App: React.FC = () => {
     const [selectedTaskCards, setSelectedTaskCards] = useState<string[]>([]);
     const [currentTask, setCurrentTask] = useState<Task | undefined>();
     const [multiDeleteActive, setMultiDeleteActive] = useState(false);
-    const [searchKeyword, setSearchKeyword] = useState<string | undefined>(undefined);
+    const [searchKeyword, setSearchKeyword] = useState<string | undefined>(
+        undefined
+    );
     const debouncedSearchKeyword = useDebounce(searchKeyword, 300); // Debounce search input by 300ms
     const [filterData, setFilterData] = useState<FilterValues>({
         startDate: null,
         endDate: null,
         sortOption: null,
-        sortOrder: null
+        sortOrder: null,
     });
-    const isAnyFilterActive = Object.values(filterData).some(value => value !== null);
+    const isAnyFilterActive = Object.values(filterData).some(
+        (value) => value !== null
+    );
     const { isOpen, onOpenChange, onClose, onOpen } = useDisclosure();
-    const [updateData, setUpdateData] = useState(-1)
+    const [updateData, setUpdateData] = useState(-1);
 
     const onNotificationPress = (selectedTask: Task) => {
-        setCurrentTask(selectedTask)
-        setModalType(ModalTypes.ViewTask)
-        onOpen()
-    }
+        setCurrentTask(selectedTask);
+        setModalType(ModalTypes.ViewTask);
+        onOpen();
+    };
 
     useEffect(() => {
         const loadTasks = async () => {
@@ -58,7 +76,8 @@ const App: React.FC = () => {
                 const fetchedTasks: FetchTasksResponse = await fetchTasks({
                     startDate: filterData.startDate,
                     endDate: filterData.endDate,
-                    status: selectedTab !== TaskTabs.All ? selectedTab : undefined,
+                    status:
+                        selectedTab !== TaskTabs.All ? selectedTab : undefined,
                     orderBy: filterData.sortOption || 'createdAt',
                     order: filterData.sortOrder || 'asc',
                     page: 1,
@@ -90,59 +109,127 @@ const App: React.FC = () => {
             case ModalTypes.ViewTask: {
                 const temp = { ...currentTask };
                 if (currentTask?.dueDate && currentTask.dueDate && temp) {
-                    const dueDateString = currentTask.dueDate.toString().split('T')[0]
-                    const dueDateObj = parseDate(dueDateString!)
-                    temp['dueDate'] = dueDateObj
+                    const dueDateString = currentTask.dueDate
+                        .toString()
+                        .split('T')[0];
+                    const dueDateObj = parseDate(dueDateString!);
+                    temp['dueDate'] = dueDateObj;
                 }
                 return temp;
             }
             case ModalTypes.DeleteCard:
                 return {
                     taskIds: [currentTask!.id.toString()],
-                    taskTitle: currentTask?.title
-                }
+                    taskTitle: currentTask?.title,
+                };
             case ModalTypes.DeleteCards:
                 return {
                     taskIds: selectedTaskCards,
-                }
+                };
         }
     };
 
     return (
-        <div className="flex h-[90%] md:h-full">
-            <Sidebar onOpen={onOpen} setModalType={setModalType} setMultiDeleteActive={setMultiDeleteActive} />
-            <div className="p-4 flex flex-col flex-grow">
-                <Topbar taskStatus={TaskTabs.All} searchKeyword={searchKeyword} setSearchKeyword={setSearchKeyword} onNotificationPress={onNotificationPress} />
-                <TaskStatusTabs selectedKey={selectedTab} setSelectedKey={setSelectedTab} />
-                {isAnyFilterActive &&
-                    <div className="flex space-x-2 py-2 px-2 items-center w-full overflow-hidden">
-                        <p className="hover:cursor-pointer hover:underline w-fit text-danger whitespace-nowrap" onClick={() => setFilterData({ startDate: null, endDate: null, sortOption: null, sortOrder: null })}>Clear Filter</p>
-                        <Divider className="my-4 w-full" />
-                    </div>
-                }
-                {multiDeleteActive && (
-                    <div className="flex space-x-4 py-2 px-2 items-center overflow-hidden">
-                        <p className="whitespace-nowrap">{selectedTaskCards.length} tasks selected</p>
-                        {selectedTaskCards.length !== 0 && <p className="hover:cursor-pointer hover:underline w-fit text-danger whitespace-nowrap" onClick={() => { setModalType(ModalTypes.DeleteCards); onOpen() }}>Delete Cards</p>}
-                        <p className="hover:cursor-pointer hover:underline w-fit" onClick={() => { setMultiDeleteActive(false); setSelectedTaskCards([]); }}>Cancel</p>
+        <div className="flex h-[90%] w-full md:h-full">
+            <Sidebar
+                onOpen={onOpen}
+                setModalType={setModalType}
+                setMultiDeleteActive={setMultiDeleteActive}
+            />
+            <div className="flex w-full flex-col p-4">
+                <Topbar
+                    taskStatus={TaskTabs.All}
+                    searchKeyword={searchKeyword}
+                    setSearchKeyword={setSearchKeyword}
+                    onNotificationPress={onNotificationPress}
+                />
+                <TaskStatusTabs
+                    selectedKey={selectedTab}
+                    setSelectedKey={setSelectedTab}
+                />
+                {isAnyFilterActive && (
+                    <div className="flex w-full items-center space-x-2 overflow-hidden px-2 py-2">
+                        <p
+                            className="w-fit whitespace-nowrap text-danger hover:cursor-pointer hover:underline"
+                            onClick={() =>
+                                setFilterData({
+                                    startDate: null,
+                                    endDate: null,
+                                    sortOption: null,
+                                    sortOrder: null,
+                                })
+                            }
+                        >
+                            Clear Filter
+                        </p>
                         <Divider className="my-4 w-full" />
                     </div>
                 )}
-                <div className="flex-col flex-grow overflow-y-auto py-4 px-1">
+                {multiDeleteActive && (
+                    <div className="flex items-center space-x-4 overflow-hidden px-2 py-2">
+                        <p className="whitespace-nowrap">
+                            {selectedTaskCards.length} tasks selected
+                        </p>
+                        {selectedTaskCards.length !== 0 && (
+                            <p
+                                className="w-fit whitespace-nowrap text-danger hover:cursor-pointer hover:underline"
+                                onClick={() => {
+                                    setModalType(ModalTypes.DeleteCards);
+                                    onOpen();
+                                }}
+                            >
+                                Delete Cards
+                            </p>
+                        )}
+                        <p
+                            className="w-fit hover:cursor-pointer hover:underline"
+                            onClick={() => {
+                                setMultiDeleteActive(false);
+                                setSelectedTaskCards([]);
+                            }}
+                        >
+                            Cancel
+                        </p>
+                        <Divider className="my-4 w-full" />
+                    </div>
+                )}
+                <div className="w-full flex-grow flex-col px-1 py-4">
                     <CheckboxGroup
                         defaultValue={selectedTaskCards}
                         onValueChange={setSelectedTaskCards}
-                        classNames={{ label: "max-w-full" }}
+                        classNames={{ label: 'max-w-full' }}
                     >
-                        <div className="columns-2 md:columns-3 xl:columns-5 gap-4">
+                        <div className="columns-1 gap-4 sm:columns-2 md:columns-3 xl:columns-5">
                             {tasks.map((card) => (
-                                <div className="mb-4 break-inside-avoid w-full" key={card.id} onClick={() => { setModalType(ModalTypes.ViewTask); setCurrentTask(card); onOpen(); }}>
+                                <div
+                                    className="mb-4 w-full break-inside-avoid"
+                                    key={card.id}
+                                    onClick={() => {
+                                        setModalType(ModalTypes.ViewTask);
+                                        setCurrentTask(card);
+                                        onOpen();
+                                    }}
+                                >
                                     <TaskCard
                                         cardData={card}
                                         setUpdateData={setUpdateData}
-                                        checkbox={<Checkbox className={`${!multiDeleteActive && 'hidden'}`} value={card.id.toString()} key={card.id} />}
-                                        onEditButtonClick={() => { setModalType(ModalTypes.EditTask); setCurrentTask(card); onOpen(); }}
-                                        onDeleteButtonClick={() => { setModalType(ModalTypes.DeleteCard); setCurrentTask(card); onOpen(); }}
+                                        checkbox={
+                                            <Checkbox
+                                                className={`${!multiDeleteActive && 'hidden'}`}
+                                                value={card.id.toString()}
+                                                key={card.id}
+                                            />
+                                        }
+                                        onEditButtonClick={() => {
+                                            setModalType(ModalTypes.EditTask);
+                                            setCurrentTask(card);
+                                            onOpen();
+                                        }}
+                                        onDeleteButtonClick={() => {
+                                            setModalType(ModalTypes.DeleteCard);
+                                            setCurrentTask(card);
+                                            onOpen();
+                                        }}
                                     />
                                 </div>
                             ))}
@@ -150,7 +237,8 @@ const App: React.FC = () => {
                     </CheckboxGroup>
                 </div>
             </div>
-            <ModalComponent type={modalType}
+            <ModalComponent
+                type={modalType}
                 initialValues={initialDataAccordingToModal()}
                 onAccept={function (arg0?: FilterValues): void {
                     switch (modalType) {
@@ -163,8 +251,8 @@ const App: React.FC = () => {
                             break;
                         case ModalTypes.DeleteCard:
                         case ModalTypes.DeleteCards:
-                            setMultiDeleteActive(false)
-                            setSelectedTaskCards([])
+                            setMultiDeleteActive(false);
+                            setSelectedTaskCards([]);
                             break;
                         default:
                             onClose();

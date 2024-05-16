@@ -39,7 +39,7 @@ export async function logIn(
 
         const data: AuthApiResponse = await response.json();
         return data;
-    },'auth');
+    }, 'auth');
 }
 
 export async function signUp(
@@ -51,7 +51,7 @@ export async function signUp(
     return apiCallWithToast(async () => {
         const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/signup`;
 
-        console.log('apiUrl',apiUrl)
+        console.log('apiUrl', apiUrl);
         const response = await fetch(apiUrl, {
             method: 'POST',
             headers: {
@@ -66,5 +66,5 @@ export async function signUp(
         }
 
         return response.json();
-    },'auth');
+    }, 'auth');
 }

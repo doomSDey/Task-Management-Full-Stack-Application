@@ -21,7 +21,8 @@
 
 @font-face {
     font-family: 'Poppins';
-    src: url('../../public/font/Poppins-ExtraLightItalic.ttf') format('truetype');
+    src: url('../../public/font/Poppins-ExtraLightItalic.ttf')
+        format('truetype');
     font-weight: 200;
     font-style: italic;
 }

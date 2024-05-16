@@ -12,10 +12,10 @@ export enum TaskStatus {
 }
 
 export enum TaskCardBackgroundColors {
-    VariantA = '#FF5733',
-    VariantB = '#33FF57',
-    VariantC = '#3357FF',
-    VariantD = '#F0E68C',
+    VariantA = '#C3ACCE',
+    VariantB = '#7DCFB6',
+    VariantC = '#FFCA70',
+    VariantD = '#F78A5F',
 }
 
 export enum ModalTypes {
@@ -24,5 +24,5 @@ export enum ModalTypes {
     EditTask,
     ViewTask,
     DeleteCard,
-    DeleteCards
+    DeleteCards,
 }
