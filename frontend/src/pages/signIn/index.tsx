@@ -101,7 +101,7 @@ export default function SignIn() {
             </div>
             <div className="flex space-x-2 pt-8">
                 <p>New here?</p>
-                <Link href="/signup">
+                <Link href="/signUp">
                     <p className="cursor-pointer text-blue-500 hover:underline">
                         Join Now
                     </p>

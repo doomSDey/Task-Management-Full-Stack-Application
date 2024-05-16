@@ -49,7 +49,7 @@ export async function signUp(
 ): Promise<AuthApiResponse> {
     const avatarId = getRandomAvatar();
     return apiCallWithToast(async () => {
-        const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/signup`;
+        const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/signUp`;
 
         console.log('apiUrl', apiUrl);
         const response = await fetch(apiUrl, {
