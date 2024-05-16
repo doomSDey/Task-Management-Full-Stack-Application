@@ -1,18 +1,17 @@
-import { parseDate } from "@internationalized/date";
 import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/modal"
-import { Button, Checkbox, DatePicker, Input, Radio, RadioGroup, Select, SelectItem, Textarea } from "@nextui-org/react"
+import { Button, DatePicker, Input, Radio, RadioGroup, Select, SelectItem, Textarea } from "@nextui-org/react"
 import { ErrorMessage, Field, FieldProps, Form, Formik } from "formik";
 import { Dispatch, SetStateAction } from "react";
 import * as Yup from 'yup';
 
 import { ModalTypes, TaskCardBackgroundColors, TaskStatus } from "../helpers/enums"
 import { DeleteCards, FilterValues } from "../pages/home";
-import { Task, createTask, updateTask } from "../service/tasks";
+import { createTask, deleteTasks, Task, updateTask } from "../service/tasks";
 
 interface ModalComponentProps {
     initialValues?: FilterValues | Partial<Task> | DeleteCards,
     type: ModalTypes,
-    onAccept: (arg0: FilterValues | Partial<Task> | DeleteCards) => void,
+    onAccept: (arg0?: FilterValues) => void,
     onDecline: () => void,
     isOpen: boolean,
     onOpenChange: () => void,
@@ -23,7 +22,7 @@ interface ModalBodyComponentProps {
     type: ModalTypes,
     initialValues?: FilterValues | Partial<Task> | DeleteCards,
     onClose: () => void,
-    onAccept: (arg0: FilterValues | Partial<Task> | DeleteCards) => void,
+    onAccept: (arg0?: FilterValues) => void,
     updateData: Dispatch<SetStateAction<number>>
 }
 
@@ -82,7 +81,7 @@ const ModalBodyComponent: React.FC<ModalBodyComponentProps> = ({ type, initialVa
                     initialValues={initialValues!}
                     onSubmit={(values) => {
                         console.log(values);
-                        onAccept(values)
+                        onAccept(values as FilterValues)
                         // Handle form submission
                     }}
                 >
@@ -170,19 +169,18 @@ const ModalBodyComponent: React.FC<ModalBodyComponentProps> = ({ type, initialVa
         case ModalTypes.ViewTask:
             return (
                 <Formik
-                    initialValues={initialValues}
+                    initialValues={initialValues!}
                     validationSchema={createEditValidationSchema}
                     onSubmit={async (values, { setSubmitting }) => {
                         console.log(values);
-                        onAccept(values);
-                        const { id, title, description, status, dueDate, color } = values;
+                        const { id, title, description, status, dueDate, color } = values as Task;
                         if (type === ModalTypes.CreateTask) {
                             try {
                                 await createTask({
                                     title,
                                     description,
                                     status,
-                                    dueDate: new Date(dueDate).toISOString(),
+                                    dueDate: new Date(dueDate as string).toISOString(),
                                     color,
                                 });
                                 updateData((prev) => prev + 1);
@@ -199,7 +197,7 @@ const ModalBodyComponent: React.FC<ModalBodyComponentProps> = ({ type, initialVa
                                     title,
                                     description,
                                     status,
-                                    dueDate: new Date(dueDate).toISOString(),
+                                    dueDate: new Date(dueDate as string).toISOString(),
                                     color,
                                 });
                                 updateData((prev) => prev + 1);
@@ -323,10 +321,13 @@ const ModalBodyComponent: React.FC<ModalBodyComponentProps> = ({ type, initialVa
                         }}>
                             Cancel
                         </Button>
-                        <Button onPress={() => onAccept(initialValues!)}>
+                        <Button onPress={() => {
+                            const deleteValues = initialValues! as DeleteCards
+                            deleteTasks(deleteValues.taskIds).then((res) => { onAccept(); updateData((prev) => prev + 1); onClose() })
+                        }}>
                             Accept
                         </Button>
-                    </ModalFooter>
+                    </ModalFooter >
                 </>
             )
         default:

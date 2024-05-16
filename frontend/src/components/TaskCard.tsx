@@ -1,4 +1,4 @@
-import { Badge, Button, Card as NextUICard, CardBody, CardFooter, CardHeader, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger,Select, SelectItem, Tooltip } from '@nextui-org/react';
+import { Button, Card as NextUICard, CardBody, CardFooter, CardHeader, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Select, SelectItem, Tooltip } from '@nextui-org/react';
 
 import { TaskCardBackgroundColors, TaskStatus } from '../helpers/enums';
 import { Task } from '../service/tasks';

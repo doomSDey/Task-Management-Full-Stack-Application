@@ -173,9 +173,50 @@ export async function getTasksDueToday(): Promise<Task[]> {
 
         if (!response.ok) {
             const errorData = await response.json();
-            throw new Error(errorData.message || 'Fetching tasks due today failed');
+            throw new Error(
+                errorData.message || 'Fetching tasks due today failed'
+            );
         }
 
         return response.json();
     }, 'task');
+}
+
+export async function deleteTasks(
+    taskIds: string[]
+): Promise<{ successCount: number; failureCount: number }> {
+    const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/tasks/`;
+
+    return apiCallWithToast(async () => {
+        let successCount = 0;
+        let failureCount = 0;
+
+        for (const taskId of taskIds) {
+            try {
+                const response = await fetch(`${apiUrl}${taskId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${authToken}`,
+                    },
+                });
+
+                if (!response.ok) {
+                    failureCount++;
+                } else {
+                    successCount++;
+                }
+            } catch (error) {
+                failureCount++;
+            }
+        }
+
+        if (failureCount > 0) {
+            throw new Error(
+                `Deleted ${successCount} tasks successfully. Failed to delete ${failureCount} tasks.`
+            );
+        }
+
+        return { successCount, failureCount };
+    }, 'deleteTasks');
 }

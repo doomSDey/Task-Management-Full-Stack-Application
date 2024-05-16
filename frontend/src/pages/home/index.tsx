@@ -1,4 +1,4 @@
-import { CalendarDate, parseDate } from "@internationalized/date";
+import { parseDate } from "@internationalized/date";
 import { Checkbox, CheckboxGroup, Divider, useDisclosure } from "@nextui-org/react";
 import { useEffect, useState } from "react";
 
@@ -10,8 +10,11 @@ import Topbar from "../../components/Topbar";
 import { ModalTypes, TaskCardBackgroundColors, TaskTabs } from "../../helpers/enums";
 import useDebounce from "../../hooks/useDebounce";
 import { fetchTasks, FetchTasksParams, FetchTasksResponse, Task } from "../../service/tasks";
-import { boolean } from "yup";
 
+export interface DeleteCards {
+    taskIds: string[],
+    taskTitle?: string
+}
 export interface FilterValues {
     startDate: string | null,
     endDate: string | null,
@@ -93,6 +96,15 @@ const App: React.FC = () => {
                 }
                 return temp;
             }
+            case ModalTypes.DeleteCard:
+                return {
+                    taskIds: [currentTask!.id.toString()],
+                    taskTitle: currentTask?.title
+                }
+            case ModalTypes.DeleteCards:
+                return {
+                    taskIds: selectedTaskCards,
+                }
         }
     };
 
@@ -111,7 +123,7 @@ const App: React.FC = () => {
                 {multiDeleteActive && (
                     <div className="flex space-x-4 py-2 px-2 items-center overflow-hidden">
                         <p className="whitespace-nowrap">{selectedTaskCards.length} tasks selected</p>
-                        <p className="hover:cursor-pointer hover:underline w-fit text-danger whitespace-nowrap" onClick={() => null}>Delete Cards</p>
+                        {selectedTaskCards.length !== 0 && <p className="hover:cursor-pointer hover:underline w-fit text-danger whitespace-nowrap" onClick={() => { setModalType(ModalTypes.DeleteCards); onOpen() }}>Delete Cards</p>}
                         <p className="hover:cursor-pointer hover:underline w-fit" onClick={() => { setMultiDeleteActive(false); setSelectedTaskCards([]); }}>Cancel</p>
                         <Divider className="my-4 w-full" />
                     </div>
@@ -130,6 +142,7 @@ const App: React.FC = () => {
                                         statusChangeHandler={() => { }}
                                         checkbox={<Checkbox className={`${!multiDeleteActive && 'hidden'}`} value={card.id.toString()} key={card.id} />}
                                         onEditButtonClick={() => { setModalType(ModalTypes.EditTask); setCurrentTask(card); onOpen(); }}
+                                        onDeleteButtonClick={() => { setModalType(ModalTypes.DeleteCard); setCurrentTask(card); onOpen(); }}
                                     />
                                 </div>
                             ))}
@@ -139,7 +152,7 @@ const App: React.FC = () => {
             </div>
             <ModalComponent type={modalType}
                 initialValues={initialDataAccordingToModal()}
-                onAccept={function (arg0: FilterValues | Partial<Task>): void {
+                onAccept={function (arg0?: FilterValues): void {
                     switch (modalType) {
                         case ModalTypes.Filter:
                             setFilterData(arg0 as FilterValues);
@@ -148,7 +161,11 @@ const App: React.FC = () => {
                         case ModalTypes.ViewTask:
                             setModalType(ModalTypes.EditTask);
                             break;
-                        //todo: EditTask and create task api call
+                        case ModalTypes.DeleteCard:
+                        case ModalTypes.DeleteCards:
+                            setMultiDeleteActive(false)
+                            setSelectedTaskCards([])
+                            break;
                         default:
                             onClose();
                             return undefined;
