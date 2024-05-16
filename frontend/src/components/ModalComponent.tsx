@@ -13,7 +13,6 @@ interface ModalComponentProps {
     initialValues?: FilterValues | Partial<Task> | DeleteCards,
     type: ModalTypes,
     onAccept: (arg0?: FilterValues) => void,
-    onDecline: () => void,
     isOpen: boolean,
     onOpenChange: () => void,
     updateData: Dispatch<SetStateAction<number>>
@@ -209,7 +208,11 @@ const ModalBodyComponent: React.FC<ModalBodyComponentProps> = ({ type, initialVa
                                 setSubmitting(false);
                             }
                             setSubmitting(false);
-                        } else {
+                        }
+                        else if (type === ModalTypes.ViewTask) {
+                            onAccept()
+                        }
+                        else {
                             setSubmitting(false);
                         }
                     }}
