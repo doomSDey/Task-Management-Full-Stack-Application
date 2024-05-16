@@ -557,7 +557,7 @@ paths:
                                 properties:
                                     message:
                                         type: string
-    /user/avatar:
+    /users/avatar:
         put:
             summary: Update the user's avatar ID
             tags: [User]
