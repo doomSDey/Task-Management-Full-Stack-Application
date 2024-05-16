@@ -158,3 +158,24 @@ export async function updateTask({
         return response.json();
     }, 'task');
 }
+
+export async function getTasksDueToday(): Promise<Task[]> {
+    const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/tasks/dueToday`;
+
+    return apiCallWithToast(async () => {
+        const response = await fetch(apiUrl, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${authToken}`,
+            },
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Fetching tasks due today failed');
+        }
+
+        return response.json();
+    }, 'task');
+}

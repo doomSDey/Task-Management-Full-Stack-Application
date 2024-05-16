@@ -41,7 +41,14 @@ const App: React.FC = () => {
     });
     const isAnyFilterActive = Object.values(filterData).some(value => value !== null);
     const { isOpen, onOpenChange, onClose, onOpen } = useDisclosure();
-    const [updateData, setUpdateData ] = useState(-1)
+    const [updateData, setUpdateData] = useState(-1)
+
+    const onNotificationPress = (selectedTask: Task) => {
+        setCurrentTask(selectedTask)
+        setModalType(ModalTypes.ViewTask)
+        onOpen()
+    }
+
     useEffect(() => {
         const loadTasks = async () => {
             try {
@@ -78,7 +85,7 @@ const App: React.FC = () => {
                 };
             case ModalTypes.EditTask:
             case ModalTypes.ViewTask: {
-                const temp = {...currentTask};
+                const temp = { ...currentTask };
                 if (currentTask?.dueDate && currentTask.dueDate && temp) {
                     const dueDateString = currentTask.dueDate.toString().split('T')[0]
                     const dueDateObj = parseDate(dueDateString!)
@@ -93,7 +100,7 @@ const App: React.FC = () => {
         <div className="flex h-[90%] md:h-full">
             <Sidebar onOpen={onOpen} setModalType={setModalType} setMultiDeleteActive={setMultiDeleteActive} />
             <div className="p-4 flex flex-col flex-grow">
-                <Topbar taskStatus={TaskTabs.All} searchKeyword={searchKeyword} setSearchKeyword={setSearchKeyword} />
+                <Topbar taskStatus={TaskTabs.All} searchKeyword={searchKeyword} setSearchKeyword={setSearchKeyword} onNotificationPress={onNotificationPress} />
                 <TaskStatusTabs selectedKey={selectedTab} setSelectedKey={setSelectedTab} />
                 {isAnyFilterActive &&
                     <div className="flex space-x-2 py-2 px-2 items-center w-full overflow-hidden">
@@ -151,7 +158,7 @@ const App: React.FC = () => {
                     throw new Error("Function not implemented.");
                 }}
                 isOpen={isOpen}
-                updateData = {setUpdateData}
+                updateData={setUpdateData}
                 onOpenChange={onOpenChange}
             />
         </div>
