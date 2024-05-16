@@ -38,3 +38,48 @@ exports.show = (request, response) => {
             response.status(400).send('Some error occurred');
         });
 };
+
+exports.updateAvatar = async (request, response) => {
+    const userId = request.userId;
+    const { avatarId } = request.body; 
+
+    const allowedAvatars = [
+        'Avatar1',
+        'Avatar2',
+        'Avatar3',
+        'Avatar4',
+        'Avatar5',
+        'Avatar6',
+    ];
+
+    if (!avatarId) {
+        return response.status(400).send({ message: 'avatarId is required' });
+    }
+
+    if (!allowedAvatars.includes(avatarId)) {
+        return response
+            .status(400)
+            .send({
+                message:
+                    'Invalid avatarId. Allowed values are Avatar1, Avatar2, Avatar3, Avatar4, Avatar5, Avatar6.',
+            });
+    }
+
+    try {
+        const user = await User.findByPk(userId);
+
+        if (!user) {
+            return response.status(404).send({ message: 'User not found' });
+        }
+
+        user.avatarId = avatarId; // Update the avatarId
+        await user.save();
+
+        return response
+            .status(200)
+            .send({ message: 'Avatar updated successfully', user });
+    } catch (error) {
+        console.log(error);
+        return response.status(500).send({ message: 'Some error occurred' });
+    }
+};

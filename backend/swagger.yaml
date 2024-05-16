@@ -29,6 +29,7 @@ components:
                     description: The email address of the user
                 avatarId:
                     type: string
+                    enum: [Avatar1, Avatar2, Avatar3, Avatar4, Avatar5, Avatar6]
                     description: The avatar ID of the user
                 createdAt:
                     type: string
@@ -112,11 +113,20 @@ paths:
                                     type: string
                                 avatarId:
                                     type: string
+                                    enum:
+                                        [
+                                            Avatar1,
+                                            Avatar2,
+                                            Avatar3,
+                                            Avatar4,
+                                            Avatar5,
+                                            Avatar6,
+                                        ]
                             example:
                                 username: johndoe
                                 email: johndoe@example.com
                                 password: secret123
-                                avatarId: avatar123
+                                avatarId: avatar1
             responses:
                 '201':
                     description: The user was successfully created
@@ -525,6 +535,69 @@ paths:
                         application/json:
                             schema:
                                 $ref: '#/components/schemas/User'
+                '404':
+                    description: User not found
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                '500':
+                    description: Internal server error
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+    /user/avatar:
+        put:
+            summary: Update the user's avatar ID
+            tags: [User]
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                avatarId:
+                                    type: string
+                                    enum:
+                                        [
+                                            Avatar1,
+                                            Avatar2,
+                                            Avatar3,
+                                            Avatar4,
+                                            Avatar5,
+                                            Avatar6,
+                                        ]
+                            example:
+                                avatarId: Avatar1
+            responses:
+                '200':
+                    description: Avatar updated successfully
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                    user:
+                                        $ref: '#/components/schemas/User'
+                '400':
+                    description: Bad request
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
                 '404':
                     description: User not found
                     content:
