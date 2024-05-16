@@ -80,6 +80,34 @@ exports.getAllTasks = async (request, response) => {
     }
 };
 
+exports.getTasksDueToday = async (request, response) => {
+    const userId = request.userId; // Get the authenticated user ID
+
+    // Get the start and end of today's date
+    const startOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0);
+
+    const endOfDay = new Date();
+    endOfDay.setHours(23, 59, 59, 999);
+
+    try {
+        const tasks = await Task.findAll({
+            where: {
+                userId: userId,
+                dueDate: {
+                    [Op.between]: [startOfDay, endOfDay],
+                },
+            },
+            order: [['dueDate', 'asc']],
+        });
+
+        return response.status(200).send(tasks);
+    } catch (error) {
+        console.log(error);
+        return response.status(500).send({ message: 'Some error occurred' });
+    }
+};
+
 exports.create = async (request, response) => {
     const { title, description, status, dueDate, color } = request.body;
     const userId = request.userId; // Get the authenticated user ID

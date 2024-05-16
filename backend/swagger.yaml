@@ -258,6 +258,28 @@ paths:
                                 properties:
                                     message:
                                         type: string
+    /tasks/dueToday:
+        get:
+            summary: Get all tasks due today
+            tags: [Tasks]
+            responses:
+                '200':
+                    description: A list of tasks due today
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    $ref: '#/components/schemas/TaskResponse'
+                '500':
+                    description: Internal server error
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
     /tasks:
         get:
             summary: Get all tasks for the given user with filters and pagination
@@ -278,7 +300,7 @@ paths:
                 - in: query
                   name: status
                   schema:
-                      type: string
+                      enum: [Pending, InProgress, Completed]
                   description: Filter tasks by status
                 - in: query
                   name: orderBy
