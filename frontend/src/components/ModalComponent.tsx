@@ -8,6 +8,7 @@ import { ModalTypes, TaskCardBackgroundColors, TaskStatus } from "../helpers/enu
 import { DeleteCards, FilterValues } from "../pages/home";
 import { createTask, deleteTasks, Task, updateTask } from "../service/tasks";
 
+//todo: refactor into a proper factory
 interface ModalComponentProps {
     initialValues?: FilterValues | Partial<Task> | DeleteCards,
     type: ModalTypes,
