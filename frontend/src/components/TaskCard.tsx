@@ -1,10 +1,10 @@
-import { Button, Card as NextUICard, CardBody, CardFooter, CardHeader, Select, SelectItem, Tooltip, Badge, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@nextui-org/react';
+import { Badge, Button, Card as NextUICard, CardBody, CardFooter, CardHeader, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger,Select, SelectItem, Tooltip } from '@nextui-org/react';
 
 import { TaskCardBackgroundColors, TaskStatus } from '../helpers/enums';
-import { CardData } from '../pages/home';
+import { Task } from '../service/tasks';
 
 interface TaskCardProps {
-    cardData: CardData;
+    cardData: Task;
     statusChangeHandler: (status: TaskStatus) => void;
     onEditButtonClick: () => void
     onDeleteButtonClick: () => void

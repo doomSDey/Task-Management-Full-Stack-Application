@@ -1,11 +1,13 @@
 import { Avatar, Badge, Button, Divider, Dropdown, DropdownItem, DropdownMenu, DropdownSection, DropdownTrigger, Input } from "@nextui-org/react"
 import Image from 'next/image'
 
-import { TaskTabs } from "../helpers/enums";
 import { useAuth } from "../context/AuthContext";
+import { TaskTabs } from "../helpers/enums";
 
 interface TopbarProps {
     taskStatus: TaskTabs;
+    searchKeyword: undefined | string
+    setSearchKeyword: (searchKeyword: string) => void
 }
 
 const avatarUrlList = [
@@ -21,7 +23,7 @@ const notificationList = [
     { id: 3, title: "test2" },
 ]
 
-const Topbar: React.FC<TopbarProps> = ({ taskStatus }) => {
+const Topbar: React.FC<TopbarProps> = ({ taskStatus, searchKeyword, setSearchKeyword }) => {
     const auth = useAuth();
 
     const ProfileComponent = () => {
@@ -107,11 +109,11 @@ const Topbar: React.FC<TopbarProps> = ({ taskStatus }) => {
                     type="text"
                     placeholder={`Search in ${taskStatus}`}
                     labelPlacement="outside"
+                    value={searchKeyword}
+                    onChange={(e) => setSearchKeyword(e.target.value)}
                     className="w-full"
                     endContent={
-                        <Button isIconOnly variant="ghost" className="outline-none border-none" aria-label="Search">
-                            <i className="bi bi-search"></i>
-                        </Button>
+                        <i className="bi bi-search"></i>
                     }
                 />
             </div>
@@ -121,11 +123,11 @@ const Topbar: React.FC<TopbarProps> = ({ taskStatus }) => {
                     type="text"
                     placeholder={`Search in ${taskStatus}`}
                     labelPlacement="outside"
+                    value={searchKeyword}
+                    onChange={(e) => setSearchKeyword(e.target.value)}
                     className="flex-grow"
                     endContent={
-                        <Button isIconOnly variant="ghost" className="outline-none border-none" aria-label="Search">
-                            <i className="bi bi-search"></i>
-                        </Button>
+                        <i className="bi bi-search"></i>
                     }
                 />
                 <NotificationComponent />

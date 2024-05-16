@@ -1,12 +1,14 @@
 import { Checkbox, CheckboxGroup, Divider, useDisclosure } from "@nextui-org/react";
-import { useState } from "react";
+import { useEffect,useState } from "react";
 
-import ModalComponenet from "../../components/ModalComponent";
+import ModalComponent from "../../components/ModalComponent";
 import Sidebar from "../../components/Sidebar";
 import TaskCard from "../../components/TaskCard";
 import TaskStatusTabs from "../../components/TaskStatusTabs";
 import Topbar from "../../components/Topbar";
-import { ModalTypes, TaskCardBackgroundColors, TaskStatus, TaskTabs } from "../../helpers/enums";
+import { ModalTypes, TaskCardBackgroundColors, TaskTabs } from "../../helpers/enums";
+import useDebounce from "../../hooks/useDebounce"; // Import the debounce hook
+import { fetchTasks,FetchTasksParams, FetchTasksResponse, Task } from "../../service/tasks";
 
 export interface CardData {
     id: number;
@@ -24,27 +26,20 @@ export interface FilterValues {
     sortOrder: string | null
 }
 
-
 function getRandomColor(): TaskCardBackgroundColors {
     const colors = Object.values(TaskCardBackgroundColors);
     return colors[Math.floor(Math.random() * colors.length)]!;
 }
 
-const cardData: CardData[] = [
-    { id: 1, title: 'Card 1', description: 'This is a short description.', status: 'Done', color: '#FF5733' },
-    { id: 2, title: 'Card 2', description: 'This is a slightly longer description that will increase the card height.', status: 'Done', color: '#FF5733' },
-    { id: 3, title: 'Card 3', description: 'This description is very long. It will make the card significantly taller than the other cards in the grid, demonstrating the masonry layout effect.', status: 'Done', color: '#FF5733' },
-    { id: 4, title: 'Card 4', description: 'Description 4.', status: 'Done', color: '#FF5733' },
-    // Add more cards as needed
-    // Add more cards as needed
-];
-
 const App: React.FC = () => {
+    const [tasks, setTasks] = useState<Task[]>([]);
     const [selectedTab, setSelectedTab] = useState(TaskTabs.All);
     const [modalType, setModalType] = useState(ModalTypes.Filter);
     const [selectedTaskCards, setSelectedTaskCards] = useState<string[]>([]);
-    const [currentTask, setCurrentTask] = useState<CardData>();
+    const [currentTask, setCurrentTask] = useState<Task | undefined>();
     const [multiDeleteActive, setMultiDeleteActive] = useState(false);
+    const [searchKeyword, setSearchKeyword] = useState<string | undefined>(undefined);
+    const debouncedSearchKeyword = useDebounce(searchKeyword, 300); // Debounce search input by 300ms
     const [filterData, setFilterData] = useState<FilterValues>({
         startDate: null,
         endDate: null,
@@ -54,10 +49,31 @@ const App: React.FC = () => {
     const isAnyFilterActive = Object.values(filterData).some(value => value !== null);
     const { isOpen, onOpenChange, onClose, onOpen } = useDisclosure();
 
+    useEffect(() => {
+        const loadTasks = async () => {
+            try {
+                const fetchedTasks: FetchTasksResponse = await fetchTasks({
+                    startDate: filterData.startDate,
+                    endDate: filterData.endDate,
+                    status: selectedTab !== TaskTabs.All ? selectedTab : undefined,
+                    orderBy: filterData.sortOption || 'createdAt',
+                    order: filterData.sortOrder || 'asc',
+                    page: 1,
+                    limit: 10,
+                    search: debouncedSearchKeyword,
+                } as FetchTasksParams);
+                setTasks(fetchedTasks.tasks);
+            } catch (error) {
+                console.error('Error loading tasks:', error);
+            }
+        };
+        loadTasks();
+    }, [filterData, debouncedSearchKeyword, selectedTab]);
+
     const initialDataAccordingToModal = () => {
         switch (modalType) {
             case ModalTypes.Filter:
-                return filterData
+                return filterData;
             case ModalTypes.CreateTask:
                 return {
                     id: undefined,
@@ -69,15 +85,15 @@ const App: React.FC = () => {
                 };
             case ModalTypes.EditTask:
             case ModalTypes.ViewTask:
-                return currentTask
+                return currentTask;
         }
-    }
+    };
 
     return (
         <div className="flex h-[90%] md:h-full">
             <Sidebar onOpen={onOpen} setModalType={setModalType} setMultiDeleteActive={setMultiDeleteActive} />
             <div className="p-4 flex flex-col flex-grow">
-                <Topbar taskStatus={TaskTabs.All} />
+                <Topbar taskStatus={TaskTabs.All} searchKeyword={searchKeyword} setSearchKeyword={setSearchKeyword} />
                 <TaskStatusTabs selectedKey={selectedTab} setSelectedKey={setSelectedTab} />
                 {isAnyFilterActive &&
                     <div className="flex space-x-2 py-2 px-2 items-center w-full overflow-hidden">
@@ -100,7 +116,7 @@ const App: React.FC = () => {
                         classNames={{ label: "max-w-full" }}
                     >
                         <div className="columns-2 md:columns-3 xl:columns-5 gap-4">
-                            {cardData.map((card) => (
+                            {tasks.map((card) => (
                                 <div className="mb-4 break-inside-avoid w-full" key={card.id} onClick={() => { setModalType(ModalTypes.ViewTask); setCurrentTask(card); onOpen(); }}>
                                     <TaskCard
                                         cardData={card}
@@ -112,12 +128,11 @@ const App: React.FC = () => {
                             ))}
                         </div>
                     </CheckboxGroup>
-
                 </div>
             </div>
-            <ModalComponenet type={modalType}
+            <ModalComponent type={modalType}
                 initialValues={initialDataAccordingToModal()}
-                onAccept={function (arg0: FilterValues | Partial<CardData>): void {
+                onAccept={function (arg0: FilterValues | Partial<Task>): void {
                     switch (modalType) {
                         case ModalTypes.Filter:
                             setFilterData(arg0 as FilterValues);
@@ -131,7 +146,6 @@ const App: React.FC = () => {
                             onClose();
                             return undefined;
                     }
-
                 }}
                 onDecline={function (): void {
                     throw new Error("Function not implemented.");

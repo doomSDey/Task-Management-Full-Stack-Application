@@ -4,17 +4,20 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import { Avatars } from './commonData';
 
+
 export async function apiCallWithToast<T>(
   apiCall: () => Promise<T>,
-  toastId?: string
+  toastId: string
 ): Promise<T> {
   // Show a processing toast if toastId is not provided
-  const processingToastId = toastId || toast.loading('Processing...');
+  if (!toast.isActive(toastId)) {
+    toast.loading('Processing...', { toastId });
+  }
 
   try {
     const result = await apiCall();
 
-    toast.update(processingToastId, {
+    toast.update(toastId, {
       render: 'Success!',
       type: 'success',
       isLoading: false,
@@ -24,7 +27,7 @@ export async function apiCallWithToast<T>(
     return result;
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : 'Operation failed';
-    toast.update(processingToastId, {
+    toast.update(toastId, {
       render: errorMessage,
       type: 'error',
       isLoading: false,
@@ -34,6 +37,7 @@ export async function apiCallWithToast<T>(
     throw error;
   }
 }
+
 
 export function getRandomAvatar(): string {
   const avatarKeys = Object.keys(Avatars);

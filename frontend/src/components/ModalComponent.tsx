@@ -4,11 +4,12 @@ import { Field, FieldProps, Form, Formik } from "formik";
 
 import { ModalTypes, TaskCardBackgroundColors, TaskStatus } from "../helpers/enums"
 import { CardData, DeleteCards, FilterValues } from "../pages/home";
+import { Task } from "../service/tasks";
 
 interface ModalComponentProps {
-    initialValues?: FilterValues | Partial<CardData> | DeleteCards,
+    initialValues?: FilterValues | Partial<Task> | DeleteCards,
     type: ModalTypes,
-    onAccept: (arg0: FilterValues | Partial<CardData> | DeleteCards) => void,
+    onAccept: (arg0: FilterValues | Partial<Task> | DeleteCards) => void,
     onDecline: () => void,
     isOpen: boolean,
     onOpenChange: () => void,
@@ -16,12 +17,12 @@ interface ModalComponentProps {
 
 interface ModalBodyComponentProps {
     type: ModalTypes,
-    initialValues?: FilterValues | Partial<CardData> | DeleteCards,
+    initialValues?: FilterValues | Partial<Task> | DeleteCards,
     onClose: () => void,
-    onAccept: (arg0: FilterValues | Partial<CardData> | DeleteCards) => void,
+    onAccept: (arg0: FilterValues | Partial<Task> | DeleteCards) => void,
 }
 
-function isDeleteCards(values: FilterValues | Partial<CardData> | DeleteCards | undefined): values is DeleteCards {
+function isDeleteCards(values: FilterValues | Partial<Task> | DeleteCards | undefined): values is DeleteCards {
     console.log('asdas', (values as DeleteCards).taskIds !== undefined)
     return (values as DeleteCards).taskIds !== undefined;
 }
@@ -113,7 +114,7 @@ const ModalBodyComponent: React.FC<ModalBodyComponentProps> = ({ type, initialVa
                                                     orientation="horizontal"
                                                 >
                                                     <Radio value="title">Title</Radio>
-                                                    <Radio value="date">Date of Creation</Radio>
+                                                    <Radio value="createdAt">Date of Creation</Radio>
                                                 </RadioGroup>
                                             )}
                                         </Field>
