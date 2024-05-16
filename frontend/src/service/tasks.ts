@@ -83,11 +83,13 @@ export async function createTask({
     title: string;
     description: string;
     status: string;
-    dueDate: string;
+    dueDate?: string;
     color: string;
 }): Promise<Task> {
     const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/tasks/newTask`;
-    const formattedDueDate = new Date(dueDate).toISOString();
+
+    let formattedDueDate = dueDate;
+    if (dueDate) formattedDueDate = new Date(dueDate).toISOString();
 
     return apiCallWithToast(async () => {
         const response = await fetch(apiUrl, {

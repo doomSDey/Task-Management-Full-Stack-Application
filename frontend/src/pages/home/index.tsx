@@ -130,7 +130,7 @@ const App: React.FC = () => {
     };
 
     return (
-        <div className="flex h-[90%] w-full md:h-full">
+        <div className="flex h-[93%] w-full md:h-full">
             <Sidebar
                 onOpen={onOpen}
                 setModalType={setModalType}
@@ -193,7 +193,7 @@ const App: React.FC = () => {
                         <Divider className="my-4 w-full" />
                     </div>
                 )}
-                <div className="w-full flex-grow flex-col px-1 py-4">
+                <div className="h-full w-full flex-col overflow-y-auto px-1 py-4">
                     <CheckboxGroup
                         defaultValue={selectedTaskCards}
                         onValueChange={setSelectedTaskCards}

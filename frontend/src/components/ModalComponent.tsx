@@ -265,9 +265,11 @@ const ModalBodyComponent: React.FC<ModalBodyComponentProps> = ({
                                     title,
                                     description,
                                     status,
-                                    dueDate: new Date(
-                                        dueDate as string
-                                    ).toISOString(),
+                                    dueDate: dueDate
+                                        ? new Date(
+                                              dueDate as string
+                                          ).toISOString()
+                                        : dueDate,
                                     color,
                                 });
                                 updateData((prev) => prev + 1);
@@ -370,6 +372,7 @@ const ModalBodyComponent: React.FC<ModalBodyComponentProps> = ({
                                                 isDisabled={
                                                     ModalTypes.ViewTask === type
                                                 }
+                                                isRequired={false}
                                                 radius="full"
                                                 placeholder="Due Date"
                                                 className="w-full"
