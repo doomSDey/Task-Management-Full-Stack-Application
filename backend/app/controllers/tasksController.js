@@ -28,14 +28,18 @@ exports.getAllTasks = async (request, response) => {
     const {
         startDate,
         endDate,
+        status, // Add status to the query parameters
         orderBy = 'createdAt',
         order = 'asc',
         page = 1,
         limit = 10,
     } = request.query;
-    console.log('userId12s',userId)
+
     const offset = (page - 1) * limit;
+
+    // Build the where clause with optional filters
     let whereClause = { userId };
+
     if (startDate && endDate) {
         whereClause.createdAt = {
             [Op.between]: [new Date(startDate), new Date(endDate)],
@@ -48,6 +52,10 @@ exports.getAllTasks = async (request, response) => {
         whereClause.createdAt = {
             [Op.lte]: new Date(endDate),
         };
+    }
+
+    if (status) {
+        whereClause.status = status;
     }
 
     try {
@@ -63,7 +71,7 @@ exports.getAllTasks = async (request, response) => {
         return response.status(200).send({
             totalItems: tasks.count,
             totalPages: totalPages,
-            currentPage: page,
+            currentPage: parseInt(page),
             tasks: tasks.rows,
         });
     } catch (error) {

@@ -276,6 +276,11 @@ paths:
                       format: date-time
                   description: Filter tasks with created date up to this date
                 - in: query
+                  name: status
+                  schema:
+                      type: string
+                  description: Filter tasks by status
+                - in: query
                   name: orderBy
                   schema:
                       type: string
