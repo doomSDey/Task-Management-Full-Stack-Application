@@ -6,7 +6,12 @@ export const content = [
     './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}',
 ];
 export const theme = {
-    extend: {},
+    extend: {
+        fontFamily: {
+            poppins: ['Poppins', 'sans-serif'],
+        },
+    },
 };
+
 export const darkMode = 'class';
 export const plugins = [nextui()];
