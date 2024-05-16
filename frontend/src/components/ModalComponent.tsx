@@ -7,7 +7,7 @@ import * as Yup from 'yup';
 
 import { ModalTypes, TaskCardBackgroundColors, TaskStatus } from "../helpers/enums"
 import { DeleteCards, FilterValues } from "../pages/home";
-import { Task, createTask } from "../service/tasks";
+import { Task, createTask, updateTask } from "../service/tasks";
 
 interface ModalComponentProps {
     initialValues?: FilterValues | Partial<Task> | DeleteCards,
@@ -175,7 +175,7 @@ const ModalBodyComponent: React.FC<ModalBodyComponentProps> = ({ type, initialVa
                     onSubmit={async (values, { setSubmitting }) => {
                         console.log(values);
                         onAccept(values);
-                        const { title, description, status, dueDate, color } = values;
+                        const { id, title, description, status, dueDate, color } = values;
                         if (type === ModalTypes.CreateTask) {
                             try {
                                 await createTask({
@@ -192,8 +192,23 @@ const ModalBodyComponent: React.FC<ModalBodyComponentProps> = ({ type, initialVa
                             } finally {
                                 setSubmitting(false);
                             }
-                        } else if ( type === ModalTypes.EditTask) {
-
+                        } else if (type === ModalTypes.EditTask) {
+                            try {
+                                await updateTask({
+                                    taskId: id,
+                                    title,
+                                    description,
+                                    status,
+                                    dueDate: new Date(dueDate).toISOString(),
+                                    color,
+                                });
+                                updateData((prev) => prev + 1);
+                                onClose();
+                            } catch (error) {
+                                console.error('Error creating task:', error);
+                            } finally {
+                                setSubmitting(false);
+                            }
                             setSubmitting(false);
                         } else {
                             setSubmitting(false);

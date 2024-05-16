@@ -113,3 +113,48 @@ export async function createTask({
         return response.json();
     }, 'task');
 }
+
+export async function updateTask({
+    taskId,
+    title,
+    description,
+    status,
+    dueDate,
+    color,
+}: {
+    taskId: number;
+    title: string;
+    description: string;
+    status: string;
+    dueDate: string;
+    color: string;
+}): Promise<Task> {
+    const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/tasks/${taskId}`;
+
+    // Ensure the dueDate is correctly formatted as an ISO 8601 string
+    const formattedDueDate = new Date(dueDate).toISOString();
+
+    return apiCallWithToast(async () => {
+        const response = await fetch(apiUrl, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${authToken}`,
+            },
+            body: JSON.stringify({
+                title,
+                description,
+                status,
+                dueDate: formattedDueDate,
+                color,
+            }),
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Updating task failed');
+        }
+
+        return response.json();
+    }, 'task');
+}
