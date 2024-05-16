@@ -1,8 +1,9 @@
 import { parseDate } from "@internationalized/date";
 import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/modal"
 import { Button, Checkbox, DatePicker, Input, Radio, RadioGroup, Select, SelectItem, Textarea } from "@nextui-org/react"
-import { Field, FieldProps, Form, Formik } from "formik";
+import { ErrorMessage, Field, FieldProps, Form, Formik } from "formik";
 import { Dispatch, SetStateAction } from "react";
+import * as Yup from 'yup';
 
 import { ModalTypes, TaskCardBackgroundColors, TaskStatus } from "../helpers/enums"
 import { DeleteCards, FilterValues } from "../pages/home";
@@ -67,6 +68,13 @@ const ModalHeaderComponent: React.FC<Partial<ModalComponentProps>> = ({ type, in
 };
 
 const ModalBodyComponent: React.FC<ModalBodyComponentProps> = ({ type, initialValues, onClose, onAccept, updateData }) => {
+    const createEditValidationSchema = Yup.object().shape({
+        title: Yup.string().required('Title is required'),
+        description: Yup.string().required('Description is required'),
+        status: Yup.string().required('Status is required'),
+        color: Yup.string().required('Color is required')
+    });
+
     switch (type) {
         case ModalTypes.Filter:
             return (
@@ -162,16 +170,37 @@ const ModalBodyComponent: React.FC<ModalBodyComponentProps> = ({ type, initialVa
         case ModalTypes.ViewTask:
             return (
                 <Formik
-                    initialValues={initialValues!}
-                    onSubmit={(values) => {
+                    initialValues={initialValues}
+                    validationSchema={createEditValidationSchema}
+                    onSubmit={async (values, { setSubmitting }) => {
                         console.log(values);
                         onAccept(values);
                         const { title, description, status, dueDate, color } = values;
-                        if (type === ModalTypes.CreateTask)
-                            createTask({ title, description, status, dueDate, color }).then((response) => { updateData((prev) => prev + 1); onClose() })
+                        if (type === ModalTypes.CreateTask) {
+                            try {
+                                await createTask({
+                                    title,
+                                    description,
+                                    status,
+                                    dueDate: new Date(dueDate).toISOString(),
+                                    color,
+                                });
+                                updateData((prev) => prev + 1);
+                                onClose();
+                            } catch (error) {
+                                console.error('Error creating task:', error);
+                            } finally {
+                                setSubmitting(false);
+                            }
+                        } else if ( type === ModalTypes.EditTask) {
+
+                            setSubmitting(false);
+                        } else {
+                            setSubmitting(false);
+                        }
                     }}
                 >
-                    {({ setFieldValue }) => (
+                    {({ setFieldValue, isSubmitting }) => (
                         <Form className="space-y-4">
                             <ModalBody>
                                 <div className="flex flex-col space-y-2">
@@ -181,6 +210,7 @@ const ModalBodyComponent: React.FC<ModalBodyComponentProps> = ({ type, initialVa
                                             <Input {...field} disabled={ModalTypes.ViewTask === type} placeholder="Title" className="w-full" />
                                         )}
                                     </Field>
+                                    <ErrorMessage name="title" component="div" className="text-red-600" />
                                 </div>
                                 <div className="flex flex-col space-y-2">
                                     <label className="font-semibold">Description</label>
@@ -189,22 +219,22 @@ const ModalBodyComponent: React.FC<ModalBodyComponentProps> = ({ type, initialVa
                                             <Textarea {...field} disabled={ModalTypes.ViewTask === type} placeholder="Description" className="w-full" />
                                         )}
                                     </Field>
+                                    <ErrorMessage name="description" component="div" className="text-red-600" />
                                 </div>
                                 <div className="flex flex-col space-y-2">
-                                    <label className="font-semibold">Due Date (Optional)</label>
+                                    <label className="font-semibold">Due Date</label>
                                     <Field name="dueDate">
                                         {({ field }: FieldProps) => (
                                             <DatePicker
                                                 {...field}
+                                                onChange={(date) => setFieldValue('dueDate', date)}
                                                 isDisabled={ModalTypes.ViewTask === type}
                                                 placeholder="Due Date"
                                                 className="w-full"
-                                                onChange={(date) => {
-                                                    setFieldValue('dueDate', date);
-                                                }}
                                             />
                                         )}
                                     </Field>
+                                    <ErrorMessage name="dueDate" component="div" className="text-red-600" />
                                 </div>
                                 <div className="flex flex-col space-y-2">
                                     <label className="font-semibold">Status</label>
@@ -226,9 +256,10 @@ const ModalBodyComponent: React.FC<ModalBodyComponentProps> = ({ type, initialVa
                                             </Select>
                                         )}
                                     </Field>
+                                    <ErrorMessage name="status" component="div" className="text-red-600" />
                                 </div>
                                 <div className="flex flex-col space-y-2">
-                                    <label className="font-semibold">Color (Optional)</label>
+                                    <label className="font-semibold">Color</label>
                                     <Field name="color">
                                         {({ field }: FieldProps) => (
                                             <div className="flex gap-4">
@@ -247,13 +278,14 @@ const ModalBodyComponent: React.FC<ModalBodyComponentProps> = ({ type, initialVa
                                             </div>
                                         )}
                                     </Field>
+                                    <ErrorMessage name="color" component="div" className="text-red-600" />
                                 </div>
                             </ModalBody>
                             <ModalFooter>
                                 <Button variant="flat" type="button" onPress={onClose}>
                                     Cancel
                                 </Button>
-                                <Button type="submit">
+                                <Button type="submit" disabled={isSubmitting}>
                                     {
                                         ModalTypes.ViewTask === type ? 'Edit' : 'Save'
                                     }
