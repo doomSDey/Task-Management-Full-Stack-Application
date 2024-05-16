@@ -2,6 +2,7 @@ import { Avatar, Badge, Button, Divider, Dropdown, DropdownItem, DropdownMenu, D
 import Image from 'next/image'
 
 import { TaskTabs } from "../helpers/enums";
+import { useAuth } from "../context/AuthContext";
 
 interface TopbarProps {
     taskStatus: TaskTabs;
@@ -21,6 +22,7 @@ const notificationList = [
 ]
 
 const Topbar: React.FC<TopbarProps> = ({ taskStatus }) => {
+    const auth = useAuth();
 
     const ProfileComponent = () => {
         return (
@@ -56,7 +58,7 @@ const Topbar: React.FC<TopbarProps> = ({ taskStatus }) => {
                             </div>
                         </DropdownItem>
                     </DropdownSection>
-                    <DropdownItem key="logout" color="danger">
+                    <DropdownItem key="logout" color="danger" onPress={auth?.signOut}>
                         Log Out
                     </DropdownItem>
                 </DropdownMenu>
