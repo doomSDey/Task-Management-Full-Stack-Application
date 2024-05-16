@@ -171,9 +171,6 @@ const App: React.FC = () => {
                             return undefined;
                     }
                 }}
-                onDecline={function (): void {
-                    throw new Error("Function not implemented.");
-                }}
                 isOpen={isOpen}
                 updateData={setUpdateData}
                 onOpenChange={onOpenChange}
