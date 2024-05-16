@@ -50,8 +50,8 @@ const Topbar: React.FC<TopbarProps> = ({ taskStatus, searchKeyword, setSearchKey
             <DropdownMenu aria-label="Profile Actions" variant="flat">
                 <DropdownItem key="profile" className="h-14 gap-2">
                     <p className="font-semibold">Signed in as</p>
-                    <p className="font-semibold">zoey</p>
-                    <p className="font-semibold">zoey@example.com</p>
+                    <p className="font-semibold">{auth?.authData?.user.username}</p>
+                    <p className="font-semibold">{auth?.authData?.user.email}</p>
                 </DropdownItem>
                 <DropdownSection title="Change avatar" showDivider>
                     <DropdownItem className="cursor-default" isReadOnly>
