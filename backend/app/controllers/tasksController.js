@@ -28,16 +28,16 @@ exports.getAllTasks = async (request, response) => {
     const {
         startDate,
         endDate,
-        status, // Add status to the query parameters
+        status,
         orderBy = 'createdAt',
         order = 'asc',
         page = 1,
         limit = 10,
+        search,
     } = request.query;
 
     const offset = (page - 1) * limit;
 
-    // Build the where clause with optional filters
     let whereClause = { userId };
 
     if (startDate && endDate) {
@@ -56,6 +56,13 @@ exports.getAllTasks = async (request, response) => {
 
     if (status) {
         whereClause.status = status;
+    }
+
+    if (search) {
+        whereClause[Op.or] = [
+            { title: { [Op.iLike]: `%${search}%` } }, // For PostgreSQL, we use Op.iLike for case-insensitive search
+            { description: { [Op.iLike]: `%${search}%` } },
+        ];
     }
 
     try {

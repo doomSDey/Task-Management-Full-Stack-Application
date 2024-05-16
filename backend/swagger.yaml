@@ -311,7 +311,11 @@ paths:
                   name: status
                   schema:
                       enum: [Pending, InProgress, Completed]
-                  description: Filter tasks by status
+                - in: query
+                  name: search
+                  schema:
+                      type: string
+                  description: Filter tasks by search keywords across title and description
                 - in: query
                   name: orderBy
                   schema:
