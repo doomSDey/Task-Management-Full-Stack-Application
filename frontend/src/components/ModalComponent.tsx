@@ -1,11 +1,12 @@
+import { parseDate } from "@internationalized/date";
 import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader } from "@nextui-org/modal"
 import { Button, Checkbox, DatePicker, Input, Radio, RadioGroup, Select, SelectItem, Textarea } from "@nextui-org/react"
 import { Field, FieldProps, Form, Formik } from "formik";
+import { Dispatch, SetStateAction } from "react";
 
 import { ModalTypes, TaskCardBackgroundColors, TaskStatus } from "../helpers/enums"
-import { CardData, DeleteCards, FilterValues } from "../pages/home";
-import { Task } from "../service/tasks";
-import { parseDate } from "@internationalized/date";
+import { DeleteCards, FilterValues } from "../pages/home";
+import { Task, createTask } from "../service/tasks";
 
 interface ModalComponentProps {
     initialValues?: FilterValues | Partial<Task> | DeleteCards,
@@ -14,6 +15,7 @@ interface ModalComponentProps {
     onDecline: () => void,
     isOpen: boolean,
     onOpenChange: () => void,
+    updateData: Dispatch<SetStateAction<number>>
 }
 
 interface ModalBodyComponentProps {
@@ -21,6 +23,7 @@ interface ModalBodyComponentProps {
     initialValues?: FilterValues | Partial<Task> | DeleteCards,
     onClose: () => void,
     onAccept: (arg0: FilterValues | Partial<Task> | DeleteCards) => void,
+    updateData: Dispatch<SetStateAction<number>>
 }
 
 function isDeleteCards(values: FilterValues | Partial<Task> | DeleteCards | undefined): values is DeleteCards {
@@ -63,7 +66,7 @@ const ModalHeaderComponent: React.FC<Partial<ModalComponentProps>> = ({ type, in
     }
 };
 
-const ModalBodyComponent: React.FC<ModalBodyComponentProps> = ({ type, initialValues, onClose, onAccept }) => {
+const ModalBodyComponent: React.FC<ModalBodyComponentProps> = ({ type, initialValues, onClose, onAccept, updateData }) => {
     switch (type) {
         case ModalTypes.Filter:
             return (
@@ -163,6 +166,9 @@ const ModalBodyComponent: React.FC<ModalBodyComponentProps> = ({ type, initialVa
                     onSubmit={(values) => {
                         console.log(values);
                         onAccept(values);
+                        const { title, description, status, dueDate, color } = values;
+                        if (type === ModalTypes.CreateTask)
+                            createTask({ title, description, status, dueDate, color }).then((response) => { updateData((prev) => prev + 1); onClose() })
                     }}
                 >
                     {({ setFieldValue }) => (
@@ -281,14 +287,14 @@ const ModalBodyComponent: React.FC<ModalBodyComponentProps> = ({ type, initialVa
     }
 };
 
-const ModalComponenet: React.FC<ModalComponentProps> = ({ type, isOpen, onOpenChange, onAccept, initialValues }) => {
+const ModalComponenet: React.FC<ModalComponentProps> = ({ type, isOpen, onOpenChange, onAccept, initialValues, updateData }) => {
     return (
         <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
             <ModalContent>
                 {(onClose) => (
                     <>
                         <ModalHeaderComponent type={type} initialValues={initialValues} />
-                        <ModalBodyComponent type={type} initialValues={initialValues} onClose={onClose} onAccept={onAccept} />
+                        <ModalBodyComponent type={type} initialValues={initialValues} onClose={onClose} onAccept={onAccept} updateData={updateData} />
                     </>
                 )}
             </ModalContent>

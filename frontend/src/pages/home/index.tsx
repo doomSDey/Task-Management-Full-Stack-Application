@@ -10,6 +10,7 @@ import Topbar from "../../components/Topbar";
 import { ModalTypes, TaskCardBackgroundColors, TaskTabs } from "../../helpers/enums";
 import useDebounce from "../../hooks/useDebounce";
 import { fetchTasks, FetchTasksParams, FetchTasksResponse, Task } from "../../service/tasks";
+import { boolean } from "yup";
 
 export interface FilterValues {
     startDate: string | null,
@@ -40,7 +41,7 @@ const App: React.FC = () => {
     });
     const isAnyFilterActive = Object.values(filterData).some(value => value !== null);
     const { isOpen, onOpenChange, onClose, onOpen } = useDisclosure();
-
+    const [updateData, setUpdateData ] = useState(-1)
     useEffect(() => {
         const loadTasks = async () => {
             try {
@@ -60,7 +61,7 @@ const App: React.FC = () => {
             }
         };
         loadTasks();
-    }, [filterData, debouncedSearchKeyword, selectedTab]);
+    }, [filterData, debouncedSearchKeyword, selectedTab, updateData]);
 
     const initialDataAccordingToModal = () => {
         switch (modalType) {
@@ -150,6 +151,7 @@ const App: React.FC = () => {
                     throw new Error("Function not implemented.");
                 }}
                 isOpen={isOpen}
+                updateData = {setUpdateData}
                 onOpenChange={onOpenChange}
             />
         </div>

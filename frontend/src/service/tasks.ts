@@ -1,6 +1,7 @@
-import Cookies from "js-cookie";
-import { apiCallWithToast } from "../helpers/commonHelpers";
-import { CalendarDate } from "@internationalized/date";
+import { CalendarDate } from '@internationalized/date';
+import Cookies from 'js-cookie';
+
+import { apiCallWithToast } from '../helpers/commonHelpers';
 const authToken = Cookies.get('authToken');
 
 export interface Task {
@@ -69,5 +70,46 @@ export async function fetchTasks({
         }
 
         return response.json();
-    }, 'getData');
+    }, 'task');
+}
+
+export async function createTask({
+    title,
+    description,
+    status,
+    dueDate,
+    color,
+}: {
+    title: string;
+    description: string;
+    status: string;
+    dueDate: string;
+    color: string;
+}): Promise<Task> {
+    const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/tasks/newTask`;
+    const formattedDueDate = new Date(dueDate).toISOString();
+
+    return apiCallWithToast(async () => {
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${authToken}`,
+            },
+            body: JSON.stringify({
+                title,
+                description,
+                status,
+                dueDate: formattedDueDate,
+                color,
+            }),
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Creating task failed');
+        }
+
+        return response.json();
+    }, 'task');
 }
