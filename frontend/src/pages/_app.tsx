@@ -15,7 +15,7 @@ export default function App({ Component, pageProps }: AppProps) {
                     <Component {...pageProps} />
                 </div>
             </NextUIProvider>
-            <ToastContainer autoClose={1200} />
+            <ToastContainer autoClose={1200} draggable position='bottom-right'/>
         </AuthProvider>
     );
 }

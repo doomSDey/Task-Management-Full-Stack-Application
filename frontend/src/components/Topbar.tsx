@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
 import { useAuth } from "../context/AuthContext";
+import { Avatars } from "../helpers/commonData";
 import { TaskTabs } from "../helpers/enums";
 import { getTasksDueToday, Task } from "../service/tasks";
 
@@ -10,19 +11,14 @@ interface TopbarProps {
     taskStatus: TaskTabs;
     searchKeyword: undefined | string;
     setSearchKeyword: (searchKeyword: string) => void;
-    onNotificationPress: (task: Task) => void
+    onNotificationPress: (task: Task) => void;
 }
-
-const avatarUrlList = [
-    'https://i.pravatar.cc/150?u=a042581f4e29026704d',
-    'https://i.pravatar.cc/150?u=a042581f4e29026704d',
-    'https://i.pravatar.cc/150?u=a042581f4e29026704d',
-    'https://i.pravatar.cc/150?u=a042581f4e29026704d',
-];
 
 const Topbar: React.FC<TopbarProps> = ({ taskStatus, searchKeyword, setSearchKeyword, onNotificationPress }) => {
     const auth = useAuth();
     const [notificationList, setNotificationList] = useState<Task[]>([]);
+    const avatarId: keyof typeof Avatars = auth?.authData?.user.avatarId || 'Avatar1';
+    const avatarUrl = `/static/${Avatars[avatarId]}`;
 
     useEffect(() => {
         const fetchTasksDueToday = async () => {
@@ -37,6 +33,14 @@ const Topbar: React.FC<TopbarProps> = ({ taskStatus, searchKeyword, setSearchKey
         fetchTasksDueToday();
     }, [auth]);
 
+    const handleAvatarChange = async (newAvatarId: keyof typeof Avatars) => {
+        try {
+            await auth?.updateAvatar(newAvatarId.toString());
+        } catch (error) {
+            console.error('Error updating avatar:', error);
+        }
+    };
+
     const ProfileComponent = () => (
         <Dropdown placement="bottom-end">
             <DropdownTrigger>
@@ -44,7 +48,7 @@ const Topbar: React.FC<TopbarProps> = ({ taskStatus, searchKeyword, setSearchKey
                     isBordered
                     as="button"
                     className="transition-transform"
-                    src="https://i.pravatar.cc/150?u=a042581f4e29026704d"
+                    src={avatarUrl}
                 />
             </DropdownTrigger>
             <DropdownMenu aria-label="Profile Actions" variant="flat">
@@ -55,13 +59,15 @@ const Topbar: React.FC<TopbarProps> = ({ taskStatus, searchKeyword, setSearchKey
                 </DropdownItem>
                 <DropdownSection title="Change avatar" showDivider>
                     <DropdownItem className="cursor-default" isReadOnly>
-                        <div className="grid grid-cols-3 gap-4 ">
-                            {avatarUrlList.map((avatar, index) => (
-                                <div key={index} className="flex justify-center items-center">
+                        <div className="grid grid-cols-3 gap-4 py-4">
+                            {Object.keys(Avatars).map((key) => (
+                                <div key={key} className="flex justify-center items-center">
                                     <Avatar
+                                        isBordered
                                         as="button"
                                         className="transition-transform"
-                                        src={avatar}
+                                        src={`/static/${Avatars[key as keyof typeof Avatars]}`}
+                                        onClick={() => handleAvatarChange(key as keyof typeof Avatars)}
                                     />
                                 </div>
                             ))}
@@ -103,7 +109,7 @@ const Topbar: React.FC<TopbarProps> = ({ taskStatus, searchKeyword, setSearchKey
             {/* Logo, Profile, and Notification for small screens */}
             <div className="flex md:hidden justify-between items-center w-full">
                 <ProfileComponent />
-                <Image className="mx-auto" src='/logo.png' width={70} height={100} alt='logo' />
+                <Image className="mx-auto" src='/static/logo2.png' width={70} height={100} alt='logo' />
                 <NotificationComponent />
             </div>
             {/* Search bar for small screens */}
