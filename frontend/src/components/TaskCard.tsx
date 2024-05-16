@@ -1,22 +1,63 @@
 import { Button, Card as NextUICard, CardBody, CardFooter, CardHeader, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Select, SelectItem, Tooltip } from '@nextui-org/react';
+import { Dispatch, SetStateAction, useState } from 'react';
 
+import { useAuth } from '../context/AuthContext';
 import { TaskCardBackgroundColors, TaskStatus } from '../helpers/enums';
-import { Task } from '../service/tasks';
+import { Task, updateTask } from '../service/tasks';
 
 interface TaskCardProps {
     cardData: Task;
-    statusChangeHandler: (status: TaskStatus) => void;
+    setUpdateData: Dispatch<SetStateAction<number>>;
     onEditButtonClick: () => void
     onDeleteButtonClick: () => void
     checkbox: React.ReactElement;
 }
 
-const TaskCard: React.FC<TaskCardProps> = ({ cardData, checkbox, statusChangeHandler, onEditButtonClick, onDeleteButtonClick }) => {
-    const { title, description, status } = cardData
+const TaskCard: React.FC<TaskCardProps> = ({ cardData, checkbox, setUpdateData, onEditButtonClick, onDeleteButtonClick }) => {
+    const { title, description, status: initialStatus, color: initialColor } = cardData;
+    const [status, setStatus] = useState(initialStatus);
+    const [color, setColor] = useState(initialColor);
+    const auth = useAuth();
+
+    const handleStatusChange = async (newStatus: TaskStatus) => {
+        console.log(newStatus,'newStatus')
+        try {
+            await updateTask({
+                taskId: cardData.id,
+                title: cardData.title,
+                description: cardData.description,
+                status: newStatus,
+                dueDate: cardData.dueDate?.toString(),
+                color,
+            });
+            setStatus(newStatus);
+            setUpdateData((prev) => prev + 1);
+        } catch (error) {
+            console.error('Error updating task status:', error);
+        }
+    };
+
+    const handleColorChange = async (newColor: TaskCardBackgroundColors) => {
+        try {
+            await updateTask({
+                taskId: cardData.id,
+                title: cardData.title,
+                description: cardData.description,
+                status,
+                dueDate: cardData.dueDate?.toString(),
+                color: newColor,
+            });
+            setColor(newColor);
+            setUpdateData((prev) => prev + 1);
+        } catch (error) {
+            console.error('Error updating task color:', error);
+        }
+    };
+
     return (
         <NextUICard
             className="cursor-pointer p-4 hover:shadow-lg transition-shadow duration-300 max-h-96 min-h-32 flex flex-col"
-            style={{ background: cardData.color }}
+            style={{ background: color }}
         >
             <CardHeader className="pb-0 pt-2 px-4 flex-col gap-2 items-start">
                 <div className='w-full flex justify-between'>
@@ -25,18 +66,16 @@ const TaskCard: React.FC<TaskCardProps> = ({ cardData, checkbox, statusChangeHan
                     </div>
                     <Dropdown placement="bottom-end">
                         <DropdownTrigger>
-                            <Button size='sm' variant='bordered' isIconOnly radius="full" aria-label="Colors" style={{ backgroundColor: cardData.color }}>
+                            <Button size='sm' variant='bordered' isIconOnly radius="full" aria-label="Colors" style={{ backgroundColor: color }}>
                             </Button>
                         </DropdownTrigger>
                         <DropdownMenu aria-label="Available Colors" variant="flat">
                             <DropdownItem className="cursor-default" isReadOnly>
-                                <div className="flex gap-4 ">
-                                    {
-                                        Object.values(TaskCardBackgroundColors).map((color) => (
-                                            <Button key={color} size='sm' isIconOnly radius="full" aria-label={color} style={{ backgroundColor: color }}>
-                                            </Button>
-                                        ))
-                                    }
+                                <div className="flex gap-4">
+                                    {Object.values(TaskCardBackgroundColors).map((colorOption) => (
+                                        <Button key={colorOption} size='sm' isIconOnly radius="full" aria-label={colorOption} style={{ backgroundColor: colorOption }} onPress={() => handleColorChange(colorOption)}>
+                                        </Button>
+                                    ))}
                                 </div>
                             </DropdownItem>
                         </DropdownMenu>
@@ -54,7 +93,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ cardData, checkbox, statusChangeHan
                     <Select
                         placeholder="Select current status"
                         selectedKeys={[status]}
-                        onSelectionChange={(e) => statusChangeHandler(e as TaskStatus)}
+                        onChange={(e) => {handleStatusChange(e.target.value as TaskStatus)}}
                         size='sm'
                     >
                         {Object.values(TaskStatus).map((item) => (
