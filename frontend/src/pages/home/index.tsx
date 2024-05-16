@@ -139,7 +139,7 @@ const App: React.FC = () => {
                                 <div className="mb-4 break-inside-avoid w-full" key={card.id} onClick={() => { setModalType(ModalTypes.ViewTask); setCurrentTask(card); onOpen(); }}>
                                     <TaskCard
                                         cardData={card}
-                                        statusChangeHandler={() => { }}
+                                        setUpdateData={setUpdateData}
                                         checkbox={<Checkbox className={`${!multiDeleteActive && 'hidden'}`} value={card.id.toString()} key={card.id} />}
                                         onEditButtonClick={() => { setModalType(ModalTypes.EditTask); setCurrentTask(card); onOpen(); }}
                                         onDeleteButtonClick={() => { setModalType(ModalTypes.DeleteCard); setCurrentTask(card); onOpen(); }}
