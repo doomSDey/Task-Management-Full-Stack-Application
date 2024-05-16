@@ -1,5 +1,6 @@
 import Cookies from "js-cookie";
 import { apiCallWithToast } from "../helpers/commonHelpers";
+import { CalendarDate } from "@internationalized/date";
 const authToken = Cookies.get('authToken');
 
 export interface Task {
@@ -8,7 +9,7 @@ export interface Task {
     description: string;
     status: string;
     color: string;
-    dueDate?: string;
+    dueDate?: string | CalendarDate;
     createdAt: string;
     updatedAt: string;
 }

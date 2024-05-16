@@ -1,5 +1,6 @@
+import { CalendarDate, parseDate } from "@internationalized/date";
 import { Checkbox, CheckboxGroup, Divider, useDisclosure } from "@nextui-org/react";
-import { useEffect,useState } from "react";
+import { useEffect, useState } from "react";
 
 import ModalComponent from "../../components/ModalComponent";
 import Sidebar from "../../components/Sidebar";
@@ -7,17 +8,8 @@ import TaskCard from "../../components/TaskCard";
 import TaskStatusTabs from "../../components/TaskStatusTabs";
 import Topbar from "../../components/Topbar";
 import { ModalTypes, TaskCardBackgroundColors, TaskTabs } from "../../helpers/enums";
-import useDebounce from "../../hooks/useDebounce"; // Import the debounce hook
-import { fetchTasks,FetchTasksParams, FetchTasksResponse, Task } from "../../service/tasks";
-
-export interface CardData {
-    id: number;
-    title: string;
-    description: string;
-    status: string;
-    color: string;
-    dueDate?: string;
-}
+import useDebounce from "../../hooks/useDebounce";
+import { fetchTasks, FetchTasksParams, FetchTasksResponse, Task } from "../../service/tasks";
 
 export interface FilterValues {
     startDate: string | null,
@@ -84,8 +76,15 @@ const App: React.FC = () => {
                     dueDate: undefined,
                 };
             case ModalTypes.EditTask:
-            case ModalTypes.ViewTask:
-                return currentTask;
+            case ModalTypes.ViewTask: {
+                const temp = {...currentTask};
+                if (currentTask?.dueDate && currentTask.dueDate && temp) {
+                    const dueDateString = currentTask.dueDate.toString().split('T')[0]
+                    const dueDateObj = parseDate(dueDateString!)
+                    temp['dueDate'] = dueDateObj
+                }
+                return temp;
+            }
         }
     };
 

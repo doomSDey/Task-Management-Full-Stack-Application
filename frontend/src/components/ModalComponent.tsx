@@ -5,6 +5,7 @@ import { Field, FieldProps, Form, Formik } from "formik";
 import { ModalTypes, TaskCardBackgroundColors, TaskStatus } from "../helpers/enums"
 import { CardData, DeleteCards, FilterValues } from "../pages/home";
 import { Task } from "../service/tasks";
+import { parseDate } from "@internationalized/date";
 
 interface ModalComponentProps {
     initialValues?: FilterValues | Partial<Task> | DeleteCards,
@@ -192,7 +193,9 @@ const ModalBodyComponent: React.FC<ModalBodyComponentProps> = ({ type, initialVa
                                                 isDisabled={ModalTypes.ViewTask === type}
                                                 placeholder="Due Date"
                                                 className="w-full"
-                                                onChange={(date) => setFieldValue('dueDate', date)}
+                                                onChange={(date) => {
+                                                    setFieldValue('dueDate', date);
+                                                }}
                                             />
                                         )}
                                     </Field>
