@@ -4,6 +4,10 @@ import {
     Checkbox,
     CheckboxGroup,
     Divider,
+    Pagination,
+    Select,
+    SelectItem,
+    Spacer,
     useDisclosure,
 } from '@nextui-org/react';
 import Image from 'next/image';
@@ -53,6 +57,24 @@ const App: React.FC = () => {
     const [searchKeyword, setSearchKeyword] = useState<string | undefined>(
         undefined
     );
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage, setItemsPerPage] = useState(10);
+    const [totalPages, setTotalPages] = useState(0);
+
+    const handlePageChange = (page: number) => {
+        setCurrentPage(page);
+        // Ensure the page does not scroll back to the top
+        const scrollPosition = window.scrollY;
+        window.scrollTo(0, scrollPosition);
+    };
+
+    const handleItemsPerPageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        console.log('here', e.target.value)
+        setItemsPerPage(parseInt(e.target.value, 10));
+        setCurrentPage(1); // Reset to first page whenever items per page change
+    };
+
     const debouncedSearchKeyword = useDebounce(searchKeyword, 300); // Debounce search input by 300ms
     const [filterData, setFilterData] = useState<FilterValues>({
         startDate: null,
@@ -78,21 +100,22 @@ const App: React.FC = () => {
                 const fetchedTasks: FetchTasksResponse = await fetchTasks({
                     startDate: filterData.startDate,
                     endDate: filterData.endDate,
-                    status:
-                        selectedTab !== TaskTabs.All ? selectedTab : undefined,
+                    status: selectedTab !== TaskTabs.All ? selectedTab : undefined,
                     orderBy: filterData.sortOption || 'createdAt',
                     order: filterData.sortOrder || 'asc',
-                    page: 1,
-                    limit: 10,
+                    page: currentPage,
+                    limit: itemsPerPage,
                     search: debouncedSearchKeyword,
                 } as FetchTasksParams);
+                setTotalPages(fetchedTasks.totalPages)
                 setTasks(fetchedTasks.tasks);
             } catch (error) {
                 console.error('Error loading tasks:', error);
             }
         };
         loadTasks();
-    }, [filterData, debouncedSearchKeyword, selectedTab, updateData]);
+    }, [filterData, debouncedSearchKeyword, selectedTab, updateData, currentPage, itemsPerPage]);
+
 
     const initialDataAccordingToModal = () => {
         switch (modalType) {
@@ -195,7 +218,7 @@ const App: React.FC = () => {
                         <Divider className="my-4 w-full" />
                     </div>
                 )}
-                <div className="h-full w-full flex-col overflow-y-auto px-1 py-4">
+                <div className="h-full w-full flex flex-col justify-between overflow-y-auto px-1 py-4">
                     {
                         searchKeyword && tasks.length === 0 &&
                         <div className='w-full h-full flex flex-col gap-y-4 items-center justify-center'>
@@ -263,6 +286,21 @@ const App: React.FC = () => {
                             ))}
                         </div>
                     </CheckboxGroup>
+                    <div className="flex justify-between items-center relative py-6">
+                        <div className='md:block hidden'></div>
+                        <Pagination radius='full' className='md:ml-32' showControls total={totalPages} initialPage={currentPage} onChange={handlePageChange} />
+                        <Select
+                            selectedKeys={[itemsPerPage.toString()]}
+                            onChange={handleItemsPerPageChange}
+                            radius='full'
+                            className='max-w-24'
+                            classNames={{value:'w-full'}}
+                        >
+                            <SelectItem value={10} key="10">10</SelectItem>
+                            <SelectItem value={20} key="20">20</SelectItem>
+                            <SelectItem value={50} key="50">50</SelectItem>
+                        </Select>
+                    </div>
                 </div>
             </div>
             <ModalComponent
