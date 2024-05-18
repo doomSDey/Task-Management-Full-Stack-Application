@@ -1,0 +1,20 @@
+.Toastify__toast-theme--light {
+    background-color: var(--nextui-colors-background) !;
+    color: var(--nextui-colors-foreground);
+    border-radius: var(--nextui-radii-full);
+}
+
+.Toastify__progress-bar--success {
+    background-color: var(--nextui-colors-success) !;
+    color: var(--nextui-colors-foreground);
+}
+
+.Toastify__progress-bar--error {
+    background-color: var(--nextui-colors-danger);
+    color: var(--nextui-colors-foreground);
+}
+
+.Toastify__progress-bar--warning {
+    background-color: var(--nextui-colors-warning);
+    color: var(--nextui-colors-foreground);
+}

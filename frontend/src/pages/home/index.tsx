@@ -160,7 +160,7 @@ const App: React.FC = () => {
                 setModalType={setModalType}
                 setMultiDeleteActive={setMultiDeleteActive}
             />
-            <div className="flex w-full flex-col p-4">
+            <div className="flex w-full flex-col md:pb-4 pt-4 px-4 pb-6">
                 <Topbar
                     taskStatus={TaskTabs.All}
                     searchKeyword={searchKeyword}

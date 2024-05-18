@@ -132,9 +132,34 @@ body {
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import 'react-toastify/dist/ReactToastify.css';
 
 .custom-label [data-slot='label'] {
     padding-left: 1rem;
 }
 
+.Toastify__toast-theme--light {
+    background-color: #fff1e6 !important;
+    color: #4a4a4a !important;
+    border-radius: 50px !important;
+    --toastify-color-success: #5fd477 !important;
+    --toastify-color-warning: #ffb233 !important;
+    --toastify-color-error: #ff4035 !important;
+    --toastify-icon-color-success: #5fd477;
+    --toastify-icon-color-warning: #ffb233;
+    --toastify-icon-color-error: #ff4035;
+    --toastify-color-progress-success: #5fd477;
+    --toastify-color-progress-warning: #ffb233;
+    --toastify-color-progress-error: #ff4035;
+    --toastify-font-family: poppins;
+}
+
+@media (max-width: 480px) {
+    .Toastify__toast-theme--light {
+        border-top-left-radius: 25px !important;
+        border-top-right-radius: 25px !important;
+        border-bottom-left-radius: 0 !important;
+        border-bottom-right-radius: 0 !important;
+    }
+}
+
+@import 'react-toastify/dist/ReactToastify.css';

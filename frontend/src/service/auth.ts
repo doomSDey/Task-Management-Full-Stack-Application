@@ -39,7 +39,7 @@ export async function logIn(
 
         const data: AuthApiResponse = await response.json();
         return data;
-    }, 'auth');
+    }, 'always1');
 }
 
 export async function signUp(
@@ -66,5 +66,5 @@ export async function signUp(
         }
 
         return response.json();
-    }, 'auth');
+    }, 'always1');
 }

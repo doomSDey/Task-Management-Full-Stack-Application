@@ -31,5 +31,5 @@ export async function updateUserAvatar(
         }
 
         return response.json();
-    }, 'task');
+    }, 'always1');
 }

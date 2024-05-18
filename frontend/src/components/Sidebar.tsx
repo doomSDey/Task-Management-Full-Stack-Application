@@ -22,8 +22,8 @@ const Sidebar: React.FC<SidebarProps> = ({
                     <Image
                         className="mx-auto hidden md:block"
                         src="/static/logo2.png"
-                        width={70}
-                        height={100}
+                        width={140}
+                        height={140}
                         alt="logo"
                     />
                     <Button

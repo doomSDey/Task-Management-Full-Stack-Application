@@ -159,7 +159,7 @@ const Topbar: React.FC<TopbarProps> = ({
     );
 
     return (
-        <div className="flex w-full flex-col justify-center gap-4 py-4 md:flex-row">
+        <div className="flex w-full flex-col justify-center gap-4 pb-4 md:flex-row">
             {/* Logo, Profile, and Notification for small screens */}
             <div className="w-full md:w-5/6">
                 <div className="flex w-full items-center justify-between md:hidden">
@@ -167,7 +167,7 @@ const Topbar: React.FC<TopbarProps> = ({
                     <Image
                         className="mx-auto"
                         src="/static/logo2.png"
-                        width={70}
+                        width={100}
                         height={100}
                         alt="logo"
                     />

@@ -10,7 +10,11 @@ export async function apiCallWithToast<T>(
 ): Promise<T> {
     // Show a processing toast if toastId is not provided
     if (!toast.isActive(toastId)) {
-        toast.loading('Processing...', { toastId });
+        toast.loading('Processing...', {
+            toastId, closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+        });
     }
 
     try {
@@ -20,7 +24,7 @@ export async function apiCallWithToast<T>(
             render: 'Success!',
             type: 'success',
             isLoading: false,
-            autoClose: 5000,
+            autoClose: 25000,
         });
 
         return result;
@@ -31,7 +35,7 @@ export async function apiCallWithToast<T>(
             render: errorMessage,
             type: 'error',
             isLoading: false,
-            autoClose: 5000,
+            autoClose: 2500,
         });
 
         throw error;

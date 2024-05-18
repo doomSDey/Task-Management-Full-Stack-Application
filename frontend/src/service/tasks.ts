@@ -70,7 +70,7 @@ export async function fetchTasks({
         }
 
         return response.json();
-    }, 'task');
+    }, 'always1');
 }
 
 export async function createTask({
@@ -113,7 +113,7 @@ export async function createTask({
         }
 
         return response.json();
-    }, 'task');
+    }, 'always1');
 }
 
 export async function updateTask({
@@ -158,7 +158,7 @@ export async function updateTask({
         }
 
         return response.json();
-    }, 'task');
+    }, 'always1');
 }
 
 export async function getTasksDueToday(): Promise<Task[]> {
@@ -181,7 +181,7 @@ export async function getTasksDueToday(): Promise<Task[]> {
         }
 
         return response.json();
-    }, 'task');
+    }, 'always1');
 }
 
 export async function deleteTasks(
@@ -220,5 +220,5 @@ export async function deleteTasks(
         }
 
         return { successCount, failureCount };
-    }, 'deleteTasks');
+    }, 'always1');
 }
