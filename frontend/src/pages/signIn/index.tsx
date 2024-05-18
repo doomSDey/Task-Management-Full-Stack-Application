@@ -1,5 +1,6 @@
 import { Button, Input } from '@nextui-org/react';
-import { ErrorMessage, Field, Form, Formik } from 'formik';
+import { Field, Form, Formik } from 'formik';
+import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import * as Yup from 'yup';
@@ -14,8 +15,15 @@ export default function SignIn() {
         setIsPasswordVisible(!isPasswordVisible);
 
     return (
-        <div className="flex h-screen flex-col items-center justify-center bg-[#f0f2f7]">
+        <div className="flex h-screen flex-col items-center justify-center">
             <div className="flex h-4/6 w-5/6 flex-col justify-center rounded-lg bg-white p-8 shadow-xl md:w-2/6">
+                <Image
+                    className="mx-auto"
+                    src="/static/logo2.png"
+                    width={130}
+                    height={100}
+                    alt="logo"
+                />
                 <h2 className="mb-8 text-center text-2xl font-semibold">
                     Welcome!
                 </h2>
@@ -35,57 +43,49 @@ export default function SignIn() {
                         }
                     }}
                 >
-                    {({ isSubmitting }) => (
-                        <Form>
-                            <div className="mb-4">
-                                <Field
-                                    name="email"
-                                    label="Email"
-                                    type="email"
-                                    as={Input}
-                                    placeholder="Email"
-                                    clearable
-                                    bordered
-                                    fullWidth
-                                />
-                                <ErrorMessage
-                                    name="email"
-                                    component="div"
-                                    className="mt-1 text-red-600"
-                                />
-                            </div>
-                            <div className="mb-6">
-                                <Field
-                                    name="password"
-                                    label="Password"
-                                    type={
-                                        isPasswordVisible ? 'text' : 'password'
-                                    }
-                                    as={Input}
-                                    placeholder="Password"
-                                    clearable
-                                    bordered
-                                    fullWidth
-                                    endContent={
-                                        <button
-                                            type="button"
-                                            className="focus:outline-none"
-                                            onClick={togglePasswordVisibility}
-                                        >
-                                            {isPasswordVisible ? (
-                                                <i className="bi bi-eye"></i>
-                                            ) : (
-                                                <i className="bi bi-eye-slash"></i>
-                                            )}
-                                        </button>
-                                    }
-                                />
-                                <ErrorMessage
-                                    name="password"
-                                    component="div"
-                                    className="mt-1 text-red-600"
-                                />
-                            </div>
+                    {({ isSubmitting, errors }) => (
+                        <Form className='flex flex-col gap-y-6'>
+                            <Field
+                                name="email"
+                                label="Email"
+                                type="email"
+                                as={Input}
+                                placeholder="Email"
+                                clearable
+                                bordered
+                                fullWidth
+                                labelPlacement='outside'
+                                isInvalid={errors.email ? true : false}
+                                errorMessage={errors.email}
+                            />
+                            <Field
+                                name="password"
+                                label="Password"
+                                type={
+                                    isPasswordVisible ? 'text' : 'password'
+                                }
+                                as={Input}
+                                placeholder="Password"
+                                clearable
+                                bordered
+                                fullWidth
+                                labelPlacement='outside'
+                                isInvalid={errors.password ? true : false}
+                                errorMessage={errors.password}
+                                endContent={
+                                    <button
+                                        type="button"
+                                        className="focus:outline-none"
+                                        onClick={togglePasswordVisibility}
+                                    >
+                                        {isPasswordVisible ? (
+                                            <i className="bi bi-eye"></i>
+                                        ) : (
+                                            <i className="bi bi-eye-slash"></i>
+                                        )}
+                                    </button>
+                                }
+                            />
                             <Button
                                 type="submit"
                                 color="primary"
@@ -102,7 +102,7 @@ export default function SignIn() {
             <div className="flex space-x-2 pt-8">
                 <p>New here?</p>
                 <Link href="/signUp">
-                    <p className="cursor-pointer text-blue-500 hover:underline">
+                    <p className="cursor-pointer text-primary hover:underline">
                         Join Now
                     </p>
                 </Link>
