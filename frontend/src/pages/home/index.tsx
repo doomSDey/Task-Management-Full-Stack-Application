@@ -7,7 +7,6 @@ import {
     Pagination,
     Select,
     SelectItem,
-    Spacer,
     useDisclosure,
 } from '@nextui-org/react';
 import Image from 'next/image';
@@ -286,21 +285,22 @@ const App: React.FC = () => {
                             ))}
                         </div>
                     </CheckboxGroup>
-                    <div className="flex justify-between items-center relative py-6">
-                        <div className='md:block hidden'></div>
-                        <Pagination radius='full' className='md:ml-32' showControls total={totalPages} initialPage={currentPage} onChange={handlePageChange} />
-                        <Select
-                            selectedKeys={[itemsPerPage.toString()]}
-                            onChange={handleItemsPerPageChange}
-                            radius='full'
-                            className='max-w-24'
-                            classNames={{value:'w-full'}}
-                        >
-                            <SelectItem value={10} key="10">10</SelectItem>
-                            <SelectItem value={20} key="20">20</SelectItem>
-                            <SelectItem value={50} key="50">50</SelectItem>
-                        </Select>
-                    </div>
+                    {tasks.length !== 0 &&
+                        <div className="flex justify-between items-center relative py-6">
+                            <div className='md:block hidden'></div>
+                            <Pagination radius='full' className='md:ml-32' showControls total={totalPages} initialPage={currentPage} onChange={handlePageChange} />
+                            <Select
+                                selectedKeys={[itemsPerPage.toString()]}
+                                onChange={handleItemsPerPageChange}
+                                radius='full'
+                                className='max-w-24'
+                                classNames={{ value: 'w-full' }}
+                            >
+                                <SelectItem value={10} key="10">10</SelectItem>
+                                <SelectItem value={20} key="20">20</SelectItem>
+                                <SelectItem value={50} key="50">50</SelectItem>
+                            </Select>
+                        </div>}
                 </div>
             </div>
             <ModalComponent

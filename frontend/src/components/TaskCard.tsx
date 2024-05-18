@@ -128,10 +128,10 @@ const TaskCard: React.FC<TaskCardProps> = ({
                         </DropdownMenu>
                     </Dropdown>
                 </div>
-                <h4 className="mb-2 text-lg font-semibold">{title}</h4>
+                <h4 className="mb-2 text-xl font-semibold text-ellipsis text-background">{title}</h4>
             </CardHeader>
-            <CardBody className="overflow-visible py-2">
-                <div className="flex-grow overflow-auto">
+            <CardBody className="overflow-visible py-2 px-4">
+                <div className="flex-grow overflow-auto text-background">
                     <p>{description}</p>
                 </div>
             </CardBody>

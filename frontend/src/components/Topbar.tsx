@@ -66,6 +66,7 @@ const Topbar: React.FC<TopbarProps> = ({
                     className="transition-transform"
                     color='primary'
                     size="lg"
+                    radius='full'
                     src={avatarUrl}
                 />
             </DropdownTrigger>
@@ -197,6 +198,7 @@ const Topbar: React.FC<TopbarProps> = ({
                         value={searchKeyword}
                         onChange={(e) => setSearchKeyword(e.target.value)}
                         className="flex-grow"
+                        classNames={{base:'w-4/6'}}
                         endContent={<i className="bi bi-search"></i>}
                     />
                     <NotificationComponent />
