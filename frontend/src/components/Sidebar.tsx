@@ -21,7 +21,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                 <div className="flex gap-4 md:flex-col md:mt-24 md:items-center">
                     <Image
                         className="mx-auto hidden md:block"
-                        src="/static/logo.png"
+                        src="/static/logo2.png"
                         width={70}
                         height={100}
                         alt="logo"
