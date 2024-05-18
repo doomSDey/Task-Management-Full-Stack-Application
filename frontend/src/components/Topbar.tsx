@@ -64,6 +64,7 @@ const Topbar: React.FC<TopbarProps> = ({
                     isBordered
                     as="button"
                     className="transition-transform"
+                    color='primary'
                     size="lg"
                     src={avatarUrl}
                 />

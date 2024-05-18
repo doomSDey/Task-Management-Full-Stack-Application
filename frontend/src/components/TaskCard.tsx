@@ -90,12 +90,15 @@ const TaskCard: React.FC<TaskCardProps> = ({
                         <DropdownTrigger>
                             <Button
                                 size="sm"
-                                variant="bordered"
+                                variant="ghost"
                                 isIconOnly
                                 radius="full"
+                                color='primary'
                                 aria-label="Colors"
-                                style={{ backgroundColor: color }}
-                            ></Button>
+                                className='border-white'
+                            >
+                                <i className="bi bi-eyedropper text-white"></i>
+                            </Button>
                         </DropdownTrigger>
                         <DropdownMenu
                             aria-label="Available Colors"

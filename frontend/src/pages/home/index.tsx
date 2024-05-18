@@ -198,15 +198,16 @@ const App: React.FC = () => {
                 <div className="h-full w-full flex-col overflow-y-auto px-1 py-4">
                     {
                         searchKeyword && tasks.length === 0 &&
-                        <div className='w-full h-full flex items-center justify-center'>
-                            <Image src='/static/EmptySearch.svg' width={300} height={300} alt="No Search Results"></Image>
+                        <div className='w-full h-full flex flex-col gap-y-4 items-center justify-center'>
+                            <Image src='/static/EmptySearch.svg' width={400} height={400} alt="No Search Results"></Image>
+                            <p className='text-lg'>No task found!</p>
                         </div>
                     }
                     {
                         !searchKeyword && tasks.length === 0 &&
                         <div className='w-full h-full flex flex-col gap-y-4 items-center justify-center'>
                             <Image src='/static/EmptySection.svg' width={300} height={300} alt="Nothing here yet"></Image>
-                            <p>Create a task now</p>
+                            <p className='text-lg'>Create a task now</p>
                             <Button
                                 isIconOnly
                                 aria-label="Add Task"
