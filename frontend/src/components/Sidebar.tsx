@@ -16,12 +16,12 @@ const Sidebar: React.FC<SidebarProps> = ({
     setMultiDeleteActive,
 }) => {
     return (
-        <div className="fixed bottom-0 left-0 flex w-screen space-x-4 bg-default-200 p-4 text-white shadow-xl md:relative md:left-0 md:top-0 md:w-24 md:flex-col md:space-x-0 md:space-y-4">
+        <div className="fixed bottom-0 left-0 flex w-screen space-x-4 bg-default-100 p-4 text-white shadow-xl md:relative md:left-0 md:top-0 md:w-24 md:flex-col md:space-x-0 md:space-y-4">
             <div className="flex h-full w-full justify-center md:justify-normal">
-                <div className="flex gap-4 md:flex-col">
+                <div className="flex gap-4 md:flex-col md:mt-24 md:items-center">
                     <Image
                         className="mx-auto hidden md:block"
-                        src="/logo.png"
+                        src="/static/logo.png"
                         width={70}
                         height={100}
                         alt="logo"
@@ -29,8 +29,9 @@ const Sidebar: React.FC<SidebarProps> = ({
                     <Button
                         isIconOnly
                         aria-label="Filters"
-                        variant="ghost"
                         radius="full"
+                        color='primary'
+                        variant='ghost'
                         onPress={() => {
                             setModalType(ModalTypes.Filter), onOpen();
                         }}
@@ -40,6 +41,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                     <Button
                         isIconOnly
                         aria-label="Add Task"
+                        color='primary'
                         variant="ghost"
                         radius="full"
                         onPress={() => {
@@ -51,6 +53,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                     <Button
                         isIconOnly
                         aria-label="Delete Tasks"
+                        color='primary'
                         variant="ghost"
                         radius="full"
                         onClick={() => {

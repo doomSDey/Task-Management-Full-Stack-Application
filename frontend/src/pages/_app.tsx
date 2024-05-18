@@ -20,6 +20,7 @@ export default function App({ Component, pageProps }: AppProps) {
                 draggable
                 position="bottom-right"
                 closeButton
+                closeOnClick
             />
         </AuthProvider>
     );

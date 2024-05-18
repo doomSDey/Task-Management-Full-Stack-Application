@@ -133,3 +133,8 @@ body {
 @tailwind components;
 @tailwind utilities;
 @import 'react-toastify/dist/ReactToastify.css';
+
+.custom-label [data-slot='label'] {
+    padding-left: 1rem;
+}
+

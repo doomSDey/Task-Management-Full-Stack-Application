@@ -68,19 +68,18 @@ const Topbar: React.FC<TopbarProps> = ({
                     src={avatarUrl}
                 />
             </DropdownTrigger>
-            <DropdownMenu aria-label="Profile Actions" variant="flat">
-                <DropdownItem key="profile" className="h-14 gap-2">
-                    <p className="font-semibold">Signed in as</p>
-                    <p className="font-semibold">
-                        {auth?.authData?.user.username}
-                    </p>
-                    <p className="font-semibold">
-                        {auth?.authData?.user.email}
-                    </p>
-                </DropdownItem>
+            <DropdownMenu aria-label="Profile Actions" variant="flat" className='p-5'>
+                <DropdownSection showDivider>
+                    <DropdownItem key="profile" className="h-14 gap-2">
+                        <p className="font-semibold text-lg pb-2">Signed in as: {auth?.authData?.user.username}</p>
+                        <p >
+                            {auth?.authData?.user.email}
+                        </p>
+                    </DropdownItem>
+                </DropdownSection>
                 <DropdownSection title="Change avatar" showDivider>
                     <DropdownItem className="cursor-default" isReadOnly>
-                        <div className="grid grid-cols-3 gap-4 px-2 py-4">
+                        <div className="grid grid-cols-3 gap-10 px-2 py-4">
                             {Object.keys(Avatars).map((key) => (
                                 <div
                                     key={key}
@@ -90,6 +89,7 @@ const Topbar: React.FC<TopbarProps> = ({
                                         isBordered
                                         as="button"
                                         className="transition-transform"
+                                        size='lg'
                                         src={`/static/${Avatars[key as keyof typeof Avatars]}`}
                                         onClick={() =>
                                             handleAvatarChange(
@@ -121,6 +121,7 @@ const Topbar: React.FC<TopbarProps> = ({
                         isIconOnly
                         aria-label="Notification"
                         size="lg"
+                        color='primary'
                         radius="full"
                         variant="ghost"
                     >
@@ -130,6 +131,10 @@ const Topbar: React.FC<TopbarProps> = ({
             </Badge>
             <DropdownMenu aria-label="Notification List" variant="flat">
                 <DropdownItem className="cursor-default" isReadOnly>
+                    {
+                        notificationList.length === 0 &&
+                        <p>Nothing pending today!</p>
+                    }
                     {notificationList.map((notification, index) => (
                         <div key={index} className="w-full">
                             <Button

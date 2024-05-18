@@ -1,10 +1,12 @@
 import { parseDate } from '@internationalized/date';
 import {
+    Button,
     Checkbox,
     CheckboxGroup,
     Divider,
     useDisclosure,
 } from '@nextui-org/react';
+import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
 import ModalComponent from '../../components/ModalComponent';
@@ -194,6 +196,31 @@ const App: React.FC = () => {
                     </div>
                 )}
                 <div className="h-full w-full flex-col overflow-y-auto px-1 py-4">
+                    {
+                        searchKeyword && tasks.length === 0 &&
+                        <div className='w-full h-full flex items-center justify-center'>
+                            <Image src='/static/EmptySearch.svg' width={300} height={300} alt="No Search Results"></Image>
+                        </div>
+                    }
+                    {
+                        !searchKeyword && tasks.length === 0 &&
+                        <div className='w-full h-full flex flex-col gap-y-4 items-center justify-center'>
+                            <Image src='/static/EmptySection.svg' width={300} height={300} alt="Nothing here yet"></Image>
+                            <p>Create a task now</p>
+                            <Button
+                                isIconOnly
+                                aria-label="Add Task"
+                                color='primary'
+                                variant="ghost"
+                                radius="full"
+                                onPress={() => {
+                                    setModalType(ModalTypes.CreateTask), onOpen();
+                                }}
+                            >
+                                <i className="bi bi-plus-lg"></i>
+                            </Button>
+                        </div>
+                    }
                     <CheckboxGroup
                         defaultValue={selectedTaskCards}
                         onValueChange={setSelectedTaskCards}

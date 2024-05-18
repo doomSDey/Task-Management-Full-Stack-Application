@@ -39,7 +39,6 @@ export const plugins = [
                         DEFAULT: '#ff994d',
                         foreground: '#262626',
                     },
-
                     secondary: {
                         50: '#e1f7e4',
                         100: '#c4f0c9',
@@ -101,18 +100,19 @@ export const plugins = [
                         DEFAULT: '#ff4035',
                     },
                     default: {
-                        50: '#ffffff',
-                        100: '#fff1e6',
-                        200: '#ffe3cc',
-                        300: '#ffd4b3',
-                        400: '#ffc699',
-                        500: '#ffb780',
-                        600: '#ffa866',
-                        700: '#ff994d',
-                        800: '#ff8a33',
-                        900: '#ff7b1a',
-                        DEFAULT: '#ff994d',
-                        foreground: '#262626',
+                        50: '#f2f2f2',
+                        100: '#f2e2d4',
+                        200: '#e6c4a9',
+                        300: '#d9a67f',
+                        400: '#cc8854',
+                        500: '#bf6a2a',
+                        600: '#b3541a',
+                        700: '#a63d0f',
+                        800: '#993600',
+                        900: '#8c2f00',
+                        DEFAULT: '#a63d0f',
+                        foreground: '#1f1f1f',
+                        hover:'#ffffff'
                     },
                     primary: {
                         50: '#ffe5c3',
@@ -125,7 +125,7 @@ export const plugins = [
                         700: '#ff9347',
                         800: '#ff8832',
                         900: '#ff7d1c',
-                        DEFAULT: '#ff7d1c',
+                        DEFAULT: '#ff8832',
                     },
                     secondary: {
                         50: '#e1f7e4',

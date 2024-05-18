@@ -127,108 +127,100 @@ const ModalBodyComponent: React.FC<ModalBodyComponentProps> = ({
                 >
                     {({ setFieldValue }) => (
                         <Form className="space-y-4">
-                            <ModalBody>
-                                <div className="flex flex-col space-y-2">
-                                    <label className="font-semibold">
-                                        Date Range
-                                    </label>
-                                    <div className="flex space-x-2">
-                                        <Field name="startDate">
-                                            {({ field }: FieldProps) => (
-                                                <DatePicker
-                                                    {...field}
-                                                    placeholder="Start Date"
-                                                    radius="full"
-                                                    className="w-full"
-                                                    onChange={(date) =>
-                                                        setFieldValue(
-                                                            'startDate',
-                                                            date
-                                                        )
-                                                    }
-                                                />
-                                            )}
-                                        </Field>
-                                        <Field name="endDate">
-                                            {({ field }: FieldProps) => (
-                                                <DatePicker
-                                                    {...field}
-                                                    placeholder="End Date"
-                                                    radius="full"
-                                                    className="w-full"
-                                                    onChange={(date) =>
-                                                        setFieldValue(
-                                                            'endDate',
-                                                            date
-                                                        )
-                                                    }
-                                                />
-                                            )}
-                                        </Field>
-                                    </div>
+                            <ModalBody className='flex-col space-y-4'>
+                                <div className="flex space-x-2">
+                                    <Field name="startDate">
+                                        {({ field }: FieldProps) => (
+                                            <DatePicker
+                                                {...field}
+                                                label="Start Date"
+                                                placeholder="Start Date"
+                                                radius="full"
+                                                labelPlacement='outside'
+                                                className="w-full"
+                                                onChange={(date) =>
+                                                    setFieldValue(
+                                                        'startDate',
+                                                        date
+                                                    )
+                                                }
+                                            />
+                                        )}
+                                    </Field>
+                                    <Field name="endDate">
+                                        {({ field }: FieldProps) => (
+                                            <DatePicker
+                                                {...field}
+                                                placeholder="End Date"
+                                                label="End Date"
+                                                radius="full"
+                                                labelPlacement='outside'
+                                                className="w-full"
+                                                onChange={(date) =>
+                                                    setFieldValue(
+                                                        'endDate',
+                                                        date
+                                                    )
+                                                }
+                                            />
+                                        )}
+                                    </Field>
                                 </div>
                                 <div className="flex flex-col space-y-2">
-                                    <label className="font-semibold">
-                                        Sort By
-                                    </label>
-                                    <div className="flex space-x-4">
-                                        <Field name="sortOption">
-                                            {({ field }: FieldProps) => (
-                                                <RadioGroup
-                                                    {...field}
-                                                    value={field.value}
-                                                    onValueChange={(value) =>
-                                                        setFieldValue(
-                                                            'sortOption',
-                                                            value
-                                                        )
-                                                    }
-                                                    orientation="horizontal"
-                                                >
-                                                    <Radio value="title">
-                                                        Title
-                                                    </Radio>
-                                                    <Radio value="createdAt">
-                                                        Date of Creation
-                                                    </Radio>
-                                                </RadioGroup>
-                                            )}
-                                        </Field>
-                                    </div>
+                                    <Field name="sortOption">
+                                        {({ field }: FieldProps) => (
+                                            <RadioGroup
+                                                {...field}
+                                                label="Sort By"
+                                                value={field.value}
+                                                onValueChange={(value) =>
+                                                    setFieldValue(
+                                                        'sortOption',
+                                                        value
+                                                    )
+                                                }
+                                                orientation="horizontal"
+                                            >
+                                                <Radio value="title">
+                                                    Title
+                                                </Radio>
+                                                <Radio value="createdAt">
+                                                    Date of Creation
+                                                </Radio>
+                                            </RadioGroup>
+                                        )}
+                                    </Field>
                                 </div>
                                 <div className="flex flex-col space-y-2">
-                                    <label className="font-semibold">
-                                        Sort Order
-                                    </label>
-                                    <div className="flex space-x-4">
-                                        <Field name="sortOrder">
-                                            {({ field }: FieldProps) => (
-                                                <RadioGroup
-                                                    {...field}
-                                                    value={field.value}
-                                                    onValueChange={(value) =>
-                                                        setFieldValue(
-                                                            'sortOrder',
-                                                            value
-                                                        )
-                                                    }
-                                                    orientation="horizontal"
-                                                >
-                                                    <Radio value="asc">
-                                                        Ascending
-                                                    </Radio>
-                                                    <Radio value="desc">
-                                                        Descending
-                                                    </Radio>
-                                                </RadioGroup>
-                                            )}
-                                        </Field>
-                                    </div>
+                                    <Field name="sortOrder">
+                                        {({ field }: FieldProps) => (
+                                            <RadioGroup
+                                                {...field}
+                                                value={field.value}
+                                                label="Sort Order"
+                                                onValueChange={(value) =>
+                                                    setFieldValue(
+                                                        'sortOrder',
+                                                        value
+                                                    )
+                                                }
+                                                orientation="horizontal"
+                                            >
+                                                <Radio value="asc">
+                                                    Ascending
+                                                </Radio>
+                                                <Radio value="desc">
+                                                    Descending
+                                                </Radio>
+                                            </RadioGroup>
+                                        )}
+                                    </Field>
                                 </div>
                             </ModalBody>
                             <ModalFooter>
                                 <Button
-                                    variant="flat"
+                                    variant="ghost"
+                                    radius='full'
                                     type="button"
                                     onPress={() => {
                                         onClose();
@@ -236,7 +228,7 @@ const ModalBodyComponent: React.FC<ModalBodyComponentProps> = ({
                                 >
                                     Cancel
                                 </Button>
-                                <Button type="submit">Accept</Button>
+                                <Button type="submit" radius='full' className='text-white'>Accept</Button>
                             </ModalFooter>
                         </Form>
                     )}
@@ -247,7 +239,7 @@ const ModalBodyComponent: React.FC<ModalBodyComponentProps> = ({
         case ModalTypes.ViewTask:
             return (
                 <Formik
-                    initialValues={initialValues!}
+                    initialValues={initialValues! as Task}
                     validationSchema={createEditValidationSchema}
                     onSubmit={async (values, { setSubmitting }) => {
                         console.log(values);
@@ -267,8 +259,8 @@ const ModalBodyComponent: React.FC<ModalBodyComponentProps> = ({
                                     status,
                                     dueDate: dueDate
                                         ? new Date(
-                                              dueDate as string
-                                          ).toISOString()
+                                            dueDate as string
+                                        ).toISOString()
                                         : dueDate,
                                     color,
                                 });
@@ -306,175 +298,143 @@ const ModalBodyComponent: React.FC<ModalBodyComponentProps> = ({
                         }
                     }}
                 >
-                    {({ setFieldValue, isSubmitting }) => (
-                        <Form className="space-y-4">
-                            <ModalBody>
-                                <div className="flex flex-col space-y-2">
-                                    <label className="font-semibold">
-                                        Title
-                                    </label>
-                                    <Field name="title">
-                                        {({ field }: FieldProps) => (
-                                            <Input
-                                                {...field}
-                                                disabled={
-                                                    ModalTypes.ViewTask === type
-                                                }
-                                                radius="full"
-                                                placeholder="Title"
-                                                className="w-full"
-                                            />
-                                        )}
-                                    </Field>
-                                    <ErrorMessage
-                                        name="title"
-                                        component="div"
-                                        className="text-red-600"
-                                    />
-                                </div>
-                                <div className="flex flex-col space-y-2">
-                                    <label className="font-semibold">
-                                        Description
-                                    </label>
-                                    <Field name="description">
-                                        {({ field }: FieldProps) => (
-                                            <Textarea
-                                                {...field}
-                                                disabled={
-                                                    ModalTypes.ViewTask === type
-                                                }
-                                                radius="full"
-                                                placeholder="Description"
-                                                className="w-full"
-                                            />
-                                        )}
-                                    </Field>
-                                    <ErrorMessage
-                                        name="description"
-                                        component="div"
-                                        className="text-red-600"
-                                    />
-                                </div>
-                                <div className="flex flex-col space-y-2">
-                                    <label className="font-semibold">
-                                        Due Date
-                                    </label>
-                                    <Field name="dueDate">
-                                        {({ field }: FieldProps) => (
-                                            <DatePicker
-                                                {...field}
-                                                onChange={(date) =>
-                                                    setFieldValue(
-                                                        'dueDate',
-                                                        date
-                                                    )
-                                                }
-                                                isDisabled={
-                                                    ModalTypes.ViewTask === type
-                                                }
-                                                isRequired={false}
-                                                radius="full"
-                                                placeholder="Due Date"
-                                                className="w-full"
-                                            />
-                                        )}
-                                    </Field>
-                                    <ErrorMessage
-                                        name="dueDate"
-                                        component="div"
-                                        className="text-red-600"
-                                    />
-                                </div>
-                                <div className="flex flex-col space-y-2">
-                                    <label className="font-semibold">
-                                        Status
-                                    </label>
-                                    <Field name="status">
-                                        {({ field }: FieldProps) => (
-                                            <Select
-                                                {...field}
-                                                isDisabled={
-                                                    ModalTypes.ViewTask === type
-                                                }
-                                                radius="full"
-                                                placeholder="Select current status"
-                                                selectedKeys={[field.value]}
-                                                onSelectionChange={(value) =>
-                                                    setFieldValue(
-                                                        'status',
-                                                        value
-                                                    )
-                                                }
-                                                size="sm"
-                                            >
-                                                {Object.values(TaskStatus).map(
-                                                    (item) => (
-                                                        <SelectItem
-                                                            key={item}
-                                                            value={item}
-                                                        >
-                                                            {item}
-                                                        </SelectItem>
-                                                    )
-                                                )}
-                                            </Select>
-                                        )}
-                                    </Field>
-                                    <ErrorMessage
-                                        name="status"
-                                        component="div"
-                                        className="text-red-600"
-                                    />
-                                </div>
-                                <div className="flex flex-col space-y-2">
-                                    <label className="font-semibold">
-                                        Color
-                                    </label>
-                                    <Field name="color">
-                                        {({ field }: FieldProps) => (
-                                            <div className="flex gap-4">
-                                                {Object.values(
-                                                    TaskCardBackgroundColors
-                                                ).map((color) => (
-                                                    <div
-                                                        key={color}
-                                                        className={`h-8 w-8 cursor-pointer rounded-full ${field.value === color ? 'border-2 border-black' : ''}`}
-                                                        style={{
-                                                            backgroundColor:
-                                                                color,
-                                                        }}
-                                                        onClick={() => {
-                                                            if (
-                                                                ModalTypes.ViewTask ===
-                                                                type
-                                                            )
-                                                                return;
-                                                            setFieldValue(
-                                                                'color',
-                                                                color
-                                                            );
-                                                        }}
-                                                    ></div>
-                                                ))}
-                                            </div>
-                                        )}
-                                    </Field>
-                                    <ErrorMessage
-                                        name="color"
-                                        component="div"
-                                        className="text-red-600"
-                                    />
-                                </div>
+                    {({ setFieldValue, isSubmitting, errors }) => (
+                        <Form className="space-y-">
+                            <ModalBody className='flex-col gap-y-6'>
+                                <Field name="title">
+                                    {({ field }: FieldProps) => (
+                                        <Input
+                                            {...field}
+                                            disabled={
+                                                ModalTypes.ViewTask === type
+                                            }
+                                            radius="full"
+                                            placeholder="Title"
+                                            label="Title"
+                                            errorMessage={errors.title}
+                                            isInvalid={errors.title ? true : false}
+                                            labelPlacement='outside'
+                                            classNames={{ label: 'pl-4', errorMessage: 'pl-4' }}
+                                            className="w-full"
+                                        />
+                                    )}
+                                </Field>
+                                <Field name="description">
+                                    {({ field }: FieldProps) => (
+                                        <Textarea
+                                            {...field}
+                                            disabled={
+                                                ModalTypes.ViewTask === type
+                                            }
+                                            radius="full"
+                                            placeholder="Description"
+                                            label='Description'
+                                            errorMessage={errors.description}
+                                            isInvalid={errors.description ? true : false}
+                                            labelPlacement='outside'
+                                            classNames={{ label: 'pl-4', errorMessage: 'pl-4' }}
+                                            className="w-full"
+                                        />
+                                    )}
+                                </Field>
+                                <Field name="dueDate">
+                                    {({ field }: FieldProps) => (
+                                        <DatePicker
+                                            {...field}
+                                            onChange={(date) =>
+                                                setFieldValue(
+                                                    'dueDate',
+                                                    date
+                                                )
+                                            }
+                                            isRequired={false}
+                                            radius="full"
+                                            placeholder="Due Date"
+                                            label="Due Date"
+                                            isReadOnly={ModalTypes.ViewTask === type}
+                                            errorMessage={errors.dueDate}
+                                            isInvalid={errors.dueDate ? true : false}
+                                            labelPlacement='outside'
+                                            classNames={{ label: 'color:#FFFFFF' }}
+                                            className="w-full custom-label"
+                                        />
+                                    )}
+                                </Field>
+                                <Field name="status">
+                                    {({ field }: FieldProps) => (
+                                        <Select
+                                            {...field}
+                                            isDisabled={
+                                                ModalTypes.ViewTask === type
+                                            }
+                                            radius="full"
+                                            placeholder="Select current status"
+                                            label="Status"
+                                            errorMessage={errors.status}
+                                            isInvalid={errors.status ? true : false}
+                                            selectedKeys={[field.value]}
+                                            labelPlacement='outside'
+                                            classNames={{ label: 'pl-4', errorMessage: 'pl-4' }}
+                                            onSelectionChange={(value) =>
+                                                setFieldValue(
+                                                    'status',
+                                                    value
+                                                )
+                                            }
+                                        >
+                                            {Object.values(TaskStatus).map(
+                                                (item) => (
+                                                    <SelectItem
+                                                        key={item}
+                                                        value={item}
+                                                    >
+                                                        {item}
+                                                    </SelectItem>
+                                                )
+                                            )}
+                                        </Select>
+                                    )}
+                                </Field>
+                                <Field name="color" label="Color">
+                                    {({ field }: FieldProps) => (
+                                        <div className="flex gap-4">
+                                            {Object.values(
+                                                TaskCardBackgroundColors
+                                            ).map((color) => (
+                                                <div
+                                                    key={color}
+                                                    className={`h-8 w-8 cursor-pointer rounded-full ${field.value === color ? 'border-2 border-black' : ''}`}
+                                                    style={{
+                                                        backgroundColor:
+                                                            color,
+                                                    }}
+                                                    onClick={() => {
+                                                        if (
+                                                            ModalTypes.ViewTask ===
+                                                            type
+                                                        )
+                                                            return;
+                                                        setFieldValue(
+                                                            'color',
+                                                            color
+                                                        );
+                                                    }}
+                                                ></div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </Field>
                             </ModalBody>
                             <ModalFooter>
                                 <Button
-                                    variant="flat"
+                                    variant="ghost"
+                                    radius='full'
                                     type="button"
                                     onPress={onClose}
                                 >
                                     Cancel
                                 </Button>
-                                <Button type="submit" disabled={isSubmitting}>
+                                <Button type="submit" disabled={isSubmitting} radius='full' className='text-white'>
                                     {ModalTypes.ViewTask === type
                                         ? 'Edit'
                                         : 'Save'}
@@ -493,7 +453,8 @@ const ModalBodyComponent: React.FC<ModalBodyComponentProps> = ({
                     </ModalBody>
                     <ModalFooter>
                         <Button
-                            variant="flat"
+                            variant="ghost"
+                            radius='full'
                             type="button"
                             onPress={() => {
                                 onClose();
@@ -502,11 +463,13 @@ const ModalBodyComponent: React.FC<ModalBodyComponentProps> = ({
                             Cancel
                         </Button>
                         <Button
+                            radius='full'
+                            className='text-white'
                             onPress={() => {
                                 const deleteValues =
                                     initialValues! as DeleteCards;
                                 deleteTasks(deleteValues.taskIds).then(
-                                    (res) => {
+                                    () => {
                                         onAccept();
                                         updateData((prev) => prev + 1);
                                         onClose();

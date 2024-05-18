@@ -155,6 +155,9 @@ const TaskCard: React.FC<TaskCardProps> = ({
                             radius="full"
                             isIconOnly
                             aria-label="Edit Task"
+                            variant='ghost'
+                            color='primary'
+                            className='text-white border-white'
                             onPress={onEditButtonClick}
                         >
                             <i className="bi bi-pencil"></i>
@@ -165,7 +168,9 @@ const TaskCard: React.FC<TaskCardProps> = ({
                             size="sm"
                             radius="full"
                             isIconOnly
-                            color="warning"
+                            variant='ghost'
+                            color='primary'
+                            className='text-white border-white'
                             aria-label="Delete Tasks"
                             onPress={onDeleteButtonClick}
                         >
