@@ -172,9 +172,10 @@ const App: React.FC = () => {
                     setSelectedKey={setSelectedTab}
                 />
                 {isAnyFilterActive && (
-                    <div className="flex w-full items-center space-x-2 overflow-hidden px-2 py-2">
-                        <p
-                            className="w-fit whitespace-nowrap text-danger hover:cursor-pointer hover:underline"
+                    <div className="flex w-full items-center space-x-2 overflow-hidden px-2 pb-3 pt-5">
+                        <Button
+                            variant='ghost'
+                            color='danger'
                             onClick={() =>
                                 setFilterData({
                                     startDate: null,
@@ -185,36 +186,36 @@ const App: React.FC = () => {
                             }
                         >
                             Clear Filter
-                        </p>
-                        <Divider className="my-4 w-full" />
+                        </Button>
                     </div>
                 )}
                 {multiDeleteActive && (
-                    <div className="flex items-center space-x-4 overflow-hidden px-2 py-2">
+                    <div className="flex items-center space-x-4 px-2 pb-3 pt-5">
                         <p className="whitespace-nowrap">
                             {selectedTaskCards.length} tasks selected
                         </p>
                         {selectedTaskCards.length !== 0 && (
-                            <p
-                                className="w-fit whitespace-nowrap text-danger hover:cursor-pointer hover:underline"
+                            <Button
+                                color='danger'
+                                variant='ghost'
                                 onClick={() => {
                                     setModalType(ModalTypes.DeleteCards);
                                     onOpen();
                                 }}
                             >
                                 Delete Cards
-                            </p>
+                            </Button>
                         )}
-                        <p
-                            className="w-fit hover:cursor-pointer hover:underline"
+                        <Button
+                        variant='ghost'
+                        color='primary'
                             onClick={() => {
                                 setMultiDeleteActive(false);
                                 setSelectedTaskCards([]);
                             }}
                         >
                             Cancel
-                        </p>
-                        <Divider className="my-4 w-full" />
+                        </Button>
                     </div>
                 )}
                 <div className="h-full w-full flex flex-col justify-between overflow-y-auto px-1 py-4">
