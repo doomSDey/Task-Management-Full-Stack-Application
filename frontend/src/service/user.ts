@@ -14,7 +14,6 @@ export async function updateUserAvatar(
     avatarId: string
 ): Promise<UpdateAvatarResponse> {
     const apiUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/avatar`;
-
     return apiCallWithToast(async () => {
         const response = await fetch(apiUrl, {
             method: 'PUT',

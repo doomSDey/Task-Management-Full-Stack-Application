@@ -75,6 +75,7 @@ export default function SignIn() {
                                 endContent={
                                     <button
                                         type="button"
+                                        aria-label="toggle password visibility"
                                         className="focus:outline-none"
                                         onClick={togglePasswordVisibility}
                                     >

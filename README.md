@@ -14,11 +14,11 @@ Features
 *   Filter tasks by status (e.g., "All," "To Do," "In Progress," "Done")
 *   Responsive design for both desktop and mobile devices
 *   RESTful API for task management
-*   Server-side validation and error handling
-*   Basic user authentication and authorization
-*   Task due dates and reminders
+*   Server-side validation and error handling. JWT token are valid for a day.
+*   Basic user authentication and authorization 
+*   Task due dates and reminders. Users will have reminders of tasks due on the current date
 *   Task sorting and searching capabilities (Sort by Name and Created Date and search by keyword in both title and description)
-*   User profiles with avatars with capability to change them
+*   User profiles with avatars with capability to change them   
 
 Technologies Used
 -----------------
@@ -31,6 +31,7 @@ Technologies Used
 *   TypeScript
 *   Yup for form validation
 *   Formik for form management
+*   Jest for testing
 
 
 ### Backend
@@ -165,6 +166,7 @@ Assumptions
 *   Tasks must have a title, description, and valid status.
 *   Users must be authenticated to perform CRUD operations on tasks.
 *   Tasks are associated with users, and users can only manage their own tasks.
+*   Notification of due tasks occurs only on the day of due date for the task.
 
 Project Structure
 -----------------
@@ -187,7 +189,6 @@ Project Structure
 *   `public/`: Static resources used by the app.
 *   `hooks/`: Custom hooks used by the app.
 *   `helpers/`: Misc common code used by the app.
-
 
 Contributions
 -------------

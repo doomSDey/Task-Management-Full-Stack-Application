@@ -23,7 +23,7 @@ interface AuthContextType {
     updateAvatar: (avatarId: string) => Promise<void>;
 }
 
-const AuthContext = createContext<AuthContextType | null>(null);
+export const AuthContext = createContext<AuthContextType | null>(null);
 
 export const useAuth = () => useContext(AuthContext);
 
