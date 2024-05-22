@@ -10,6 +10,7 @@ Features
 --------
 
 *   User-friendly interface for managing tasks
+*   Masonary style for the tasks cards.
 *   Create, update, and delete tasks
 *   Filter tasks by status (e.g., "All," "To Do," "In Progress," "Done")
 *   Responsive design for both desktop and mobile devices
