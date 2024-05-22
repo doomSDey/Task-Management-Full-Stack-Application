@@ -7,7 +7,7 @@ describe('Auth Controller', () => {
     let server;
 
     beforeAll(async () => {
-        server = app.listen(2000);
+        server = app.listen(5000);
         await User.sync({ force: true }); 
     });
 

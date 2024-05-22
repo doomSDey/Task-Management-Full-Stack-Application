@@ -1,10 +1,10 @@
 {
     "name": "task_tracker_backend",
     "version": "1.0.0",
-    "main": "index.js",
+    "main": "server.js",
     "license": "MIT",
     "scripts": {
-        "dev": "nodemon -r dotenv/config index.js",
+        "dev": "nodemon -r dotenv/config server.js",
         "db:create": "sequelize-cli db:create",
         "db:migrate": "sequelize-cli db:migrate",
         "db:g:migration": "sequelize-cli migration:generate --name",
@@ -14,8 +14,8 @@
         "db:reseed": "sequelize-cli db:drop && sequelize-cli db:create && sequelize-cli db:migrate && sequelize-cli db:seed:all",
         "format": "prettier --check --ignore-path .gitignore .",
         "format:fix": "prettier --write --ignore-path .gitignore .",
-        "test": "jest",
-        "test-watch": "jest --watch",
+        "test": "npx jest --runInBand --forceExit --detectOpenHandles",
+        "test-watch": "npx jest --runInBand --forceExit --detectOpenHandles  --watchAll",
         "lint": "next lint"
     },
     "dependencies": {

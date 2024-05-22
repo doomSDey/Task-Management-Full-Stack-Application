@@ -8,7 +8,7 @@ describe('Tasks Controller', () => {
     let server, user, token, task;
 
     beforeAll(async () => {
-        server = app.listen(4000);
+        server = app.listen(5000);
         await User.sync({ force: true }); 
         await Task.sync({ force: true }); 
 

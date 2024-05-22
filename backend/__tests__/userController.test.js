@@ -1,12 +1,13 @@
 const request = require('supertest');
-const server = require('../index');
+const app = require('../index');
 const { User } = require('../app/models');
 const bcrypt = require('bcryptjs');
 
 describe('User Controller', () => {
-    let user, token;
+    let user, token, server;
 
     beforeAll(async () => {
+        server = app.listen(5000);
         await User.sync({ force: true });
 
         user = await User.create({
